@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hussein.codebase"
+    namespace = "com.tatweer.smartdrivingtest"
     compileSdk = 35
 
     defaultConfig {
@@ -90,4 +90,7 @@ dependencies {
     implementation(libs.ktor.client.resources)
     implementation(libs.ktor.client.logging)
 
+    // MQTT
+    implementation(libs.org.eclipse.paho.client.mqttv3)
+    implementation(libs.org.eclipse.paho.android.service)
 }
