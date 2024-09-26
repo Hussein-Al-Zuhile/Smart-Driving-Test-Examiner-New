@@ -49,6 +49,10 @@ sealed class Result<T>() {
         data class Unauthorized<T>(override val message: String? = null) : Failure<T>()
 
         data class QueryIsEmpty<T>(override val message: String? = null) : Failure<T>()
+
+        sealed class MQTT<T> : Failure<T>() {
+            data class SubscriptionFailed<T>(override val message: String? = null) : MQTT<T>()
+        }
     }
 
     val isLoading: Boolean

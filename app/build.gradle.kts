@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.Packaging
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -36,6 +38,11 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    packaging {
+        resources {
+            excludes += listOf("META-INF/INDEX.LIST", "META-INF/io.netty.versions.properties")
+        }
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -90,7 +97,6 @@ dependencies {
     implementation(libs.ktor.client.resources)
     implementation(libs.ktor.client.logging)
 
-    // MQTT
-    implementation(libs.org.eclipse.paho.client.mqttv3)
-    implementation(libs.org.eclipse.paho.android.service)
+    // hiveMQ for MQTT
+    implementation(libs.hivemq.mqtt.client)
 }

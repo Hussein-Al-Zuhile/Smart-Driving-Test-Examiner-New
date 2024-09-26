@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tatweer.smartdrivingtest.domain.base.Result
-import com.tatweer.smartdrivingtest.domain.model.Student
 import com.tatweer.smartdrivingtest.presentation.theme.SmartDrivingTestExaminerNewTheme
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.KoinContext
@@ -32,37 +31,10 @@ class MainActivity : ComponentActivity() {
             KoinContext {
                 SmartDrivingTestExaminerNewTheme {
                     val viewModel: MainViewModel = koinViewModel()
-                    val studentsResult =
-                        viewModel.getAllStudents()
-                            .collectAsStateWithLifecycle(initialValue = Result.initial())
-
-                    println(studentsResult)
 
                     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                         Box(Modifier.padding(innerPadding)) {
-                            when (studentsResult.value) {
-                                is Result.Loading -> {
-                                    CircularProgressIndicator()
-                                }
 
-                                is Result.Success.Data -> {
-                                    val studentListState =
-                                        rememberLazyListState((studentsResult.value as Result.Success.Data<List<Student>>).data.size)
-                                    LazyColumn(state = studentListState) {
-                                        items((studentsResult.value as Result.Success.Data<List<Student>>).data) { studentItem ->
-                                            Row {
-                                                Text(studentItem.name)
-                                            }
-                                        }
-                                    }
-                                }
-
-                                is Result.Failure -> {
-
-                                }
-
-                                else -> {}
-                            }
                         }
                     }
                 }

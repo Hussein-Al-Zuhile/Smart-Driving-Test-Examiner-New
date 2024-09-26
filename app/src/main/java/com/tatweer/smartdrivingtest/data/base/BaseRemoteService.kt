@@ -9,7 +9,6 @@ import io.ktor.client.statement.HttpResponse
 
 abstract class BaseRemoteService(protected val client: HttpClient) {
 
-    // Helpers
     protected suspend inline fun <reified T : ApiResources> get(
         resource: T,
         builder: HttpRequestBuilder.() -> Unit = {}
