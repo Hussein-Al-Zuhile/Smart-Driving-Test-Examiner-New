@@ -3,4 +3,13 @@
     <string name="logout">Logout</string>
     <string name="drive_test">Drive Test</string>
     <string name="student_list">Student List</string>
+    <string name="sign_in_here">Sign In Here</string>
+    <string name="text_please_enter_your_military_id_password"><![CDATA[Please Enter Your Military ID & Password]]></string>
+    <string name="label_military_id">Military ID</string>
+    <string name="label_password">Password</string>
+    <string name="label_sign_in">Signin</string>
+    <string name="text_privacy_policy">ABU DHABI Police Departement values the privacy of our users. Therefore, this privacy policy explains in detail how we use and protect the information we collect when you visit our Mobile App, as well as our Web Portal. Read this privacy policy completely. Please refrain from visiting the site if the terms outlined below are not satisfactory to you.</string>
+    <string name="text_or">Or</string>
+    <string name="label_card_sign_in">Signin with Examiner ID Card</string>
+    <string name="label_for_arabic_click_here">للغة العربية إضغط هنا</string>
 </resources>

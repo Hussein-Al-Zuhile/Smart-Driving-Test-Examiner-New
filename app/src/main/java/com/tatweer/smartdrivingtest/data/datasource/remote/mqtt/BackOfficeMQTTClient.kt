@@ -20,4 +20,41 @@ class BackOfficeMQTTClient : BaseMQTTClient() {
         const val MQTT_SERVER_PORT = 1883
     }
 
+    fun publishLanguage(language: String) =
+        publishWithDefaults(Event.SetLanguage.topic, language.toByteArray())
+
+    fun publishLanguageBasedOnNationality(language: String) =
+        publishWithDefaults(Event.SetLanguageBasedOnNationality.topic, language.toByteArray())
+
+    fun publishReadingEID() =
+        publishWithDefaults(Event.ReadEIDInProgress.topic, "Reading EID In Progress".toByteArray())
+
+    fun publishCarLocation(location: Location) =
+        publishWithDefaults(Event.CarLocation.topic, Json.encodeToString(location).toByteArray())
+
+    fun publishVoiceCommand(command: String) =
+        publishWithDefaults(Event.RoutingCommand.topic, command.toByteArray())
+
+    fun publishCarOutOfRoute(location: Location) =
+        publishWithDefaults(Event.CarOutOfRout.topic, Json.encodeToString(location).toByteArray())
+
+
+}
+
+private enum class Event(val topic: String) {
+    FaultDetected("FaultDetected"),
+    EmergencyStop("EmergencyStop"),
+    BoardAssigned("BoardAssigned"),
+    CarLocation("SetLocation"),
+    CarOutOfRout("CarOutOfRout"),
+    VideoSyncing("VideoSyncing"),
+    ReceiveListOfAbsents("ReceiveListOfAbsents"),
+    SetLanguage("SetLanguage"),
+    SetLanguageBasedOnNationality("SetLanguageNationality"),
+    HardwareFailed("HardwareFailed"),
+    ReadEIDInProgress("ReadEIDA"),
+    ReadEIDADone("ReadEIDADone"),
+    RoutingCommand("RoutingCommand"),
+    RoutingCommandResponse("RoutingCommandResponse"),
+    ReceiveLocation("ReceiveLocation")
 }

@@ -1,40 +1,38 @@
 package com.tatweer.smartdrivingtest.data.repository
 
-import com.hivemq.client.mqtt.mqtt3.message.publish.Mqtt3Publish
 import com.tatweer.smartdrivingtest.data.base.BaseRepository
 import com.tatweer.smartdrivingtest.data.datasource.remote.http.MainService
-import com.tatweer.smartdrivingtest.data.datasource.remote.mqtt.InVehicleMQTTClient
+import com.tatweer.smartdrivingtest.data.datasource.remote.mqtt.BackOfficeMQTTClient
 import com.tatweer.smartdrivingtest.domain.model.Location
-import kotlinx.coroutines.flow.Flow
 
 
 class MainRepository(
     private val mainService: MainService,
-    private val inVehicleMQTTClient: InVehicleMQTTClient
+    private val backOfficeMQTTClient: BackOfficeMQTTClient
 ) : BaseRepository() {
 
     suspend fun publishLanguage(language: String) = publishToTopic {
-        inVehicleMQTTClient.publishLanguage(language)
+        backOfficeMQTTClient.publishLanguage(language)
     }
 
     suspend fun publishLanguageBasedOnNationality(language: String) = publishToTopic {
-        inVehicleMQTTClient.publishLanguageBasedOnNationality(language)
+        backOfficeMQTTClient.publishLanguageBasedOnNationality(language)
     }
 
     suspend fun publishReadingEID() = publishToTopic {
-        inVehicleMQTTClient.publishReadingEID()
+        backOfficeMQTTClient.publishReadingEID()
     }
 
     suspend fun publishCarLocation(location: Location) = publishToTopic {
-        inVehicleMQTTClient.publishCarLocation(location)
+        backOfficeMQTTClient.publishCarLocation(location)
     }
 
     suspend fun publishVoiceCommand(command: String) = publishToTopic {
-        inVehicleMQTTClient.publishVoiceCommand(command)
+        backOfficeMQTTClient.publishVoiceCommand(command)
     }
 
     suspend fun publishCarOutOfRoute(location: Location) = publishToTopic {
-        inVehicleMQTTClient.publishCarOutOfRoute(location)
+        backOfficeMQTTClient.publishCarOutOfRoute(location)
     }
 
 }

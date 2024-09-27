@@ -3,7 +3,7 @@ package com.tatweer.smartdrivingtest.di
 import com.tatweer.smartdrivingtest.data.datasource.remote.http.InVehicleHttpClient
 import com.tatweer.smartdrivingtest.data.base.TokenManager
 import com.tatweer.smartdrivingtest.data.datasource.remote.http.MainService
-import com.tatweer.smartdrivingtest.data.datasource.remote.mqtt.InVehicleMQTTClient
+import com.tatweer.smartdrivingtest.data.datasource.remote.mqtt.BackOfficeMQTTClient
 import com.tatweer.smartdrivingtest.data.repository.MainRepository
 import com.tatweer.smartdrivingtest.domain.usecase.inVehicle.PublishCarLocationUseCase
 import com.tatweer.smartdrivingtest.domain.usecase.inVehicle.PublishCarOutOfRouteUseCase
@@ -19,7 +19,7 @@ val MainModule = module {
     single { InVehicleHttpClient }
     single { MainService(get()) }
     single { MainRepository(get(), get()) }
-    single { InVehicleMQTTClient() }
+    single { BackOfficeMQTTClient() }
 
 
     //region UseCases

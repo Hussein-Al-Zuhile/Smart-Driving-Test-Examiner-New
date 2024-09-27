@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tatweer.smartdrivingtest.domain.base.Result
+import com.tatweer.smartdrivingtest.presentation.splash.SplashScreen
 import com.tatweer.smartdrivingtest.presentation.theme.SmartDrivingTestExaminerNewTheme
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.KoinContext
@@ -34,7 +35,7 @@ class MainActivity : ComponentActivity() {
 
                     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                         Box(Modifier.padding(innerPadding)) {
-
+                            SplashScreen()
                         }
                     }
                 }

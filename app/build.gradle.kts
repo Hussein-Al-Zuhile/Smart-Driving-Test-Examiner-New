@@ -71,6 +71,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+    implementation("androidx.compose.material:material-icons-extended")
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
@@ -83,6 +84,9 @@ dependencies {
 
     // Kotlin
     implementation(libs.kotlinx.serialization.json)
+
+    // Google
+    implementation("com.google.accompanist:accompanist-permissions:0.36.0")
 
     // Koin
     implementation(project.dependencies.platform("io.insert-koin:koin-bom:4.0.0"))
