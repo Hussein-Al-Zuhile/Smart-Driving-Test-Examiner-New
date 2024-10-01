@@ -88,11 +88,11 @@ fun HomeNavigationRail(
                     .padding(bottom = HalfDefaultDp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-//                Image(
-//                    painter = painterResource(R.drawable.ic_logout_new),
-//                    contentDescription = null,
-//                    Modifier.padding(vertical = DefaultDp),
-//                )
+                Image(
+                    painter = painterResource(R.drawable.ic_logout),
+                    contentDescription = null,
+                    Modifier.padding(vertical = DefaultDp),
+                )
                 Text(
                     stringResource(R.string.logout).uppercase(),
                     color = AppColors.LightRed
@@ -140,13 +140,6 @@ sealed class HomeNavigationDestinations(
             return arrayOf(DriveTest, StudentList)
         }
 
-        fun valueOf(value: String): HomeNavigationDestinations {
-            return when (value) {
-                "DriveTest" -> DriveTest
-                "StudentList" -> StudentList
-                else -> throw IllegalArgumentException("No object com.tatweer.smartdrivingtest.presentation.home.HomeNavigationDestinations.$value")
-            }
-        }
     }
 }
 
@@ -156,12 +149,19 @@ fun HomeNavigationItem(
     selected: Boolean,
     onDestinationSelected: (HomeNavigationDestinations) -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     Column(
         modifier = modifier
-            .clickable { onDestinationSelected(item) }
+            .clickable(enabled) { onDestinationSelected(item) }
             .fillMaxWidth()
-            .background(if (selected) Color.White else Color.Transparent)
+            .background(
+                when {
+                    !enabled -> Color.LightGray.copy(alpha = 0.5f)
+                    selected -> Color.White
+                    else -> Color.Transparent
+                }
+            )
             .padding(horizontal = DefaultDp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

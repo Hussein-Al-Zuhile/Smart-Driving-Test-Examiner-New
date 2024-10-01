@@ -141,13 +141,14 @@ fun LoginScreenUI(modifier: Modifier = Modifier) {
                         .copy(containerColor = MaterialTheme.colorScheme.secondary),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(60.dp),
+                    ,
                     shape = RoundedCornerShape(12.dp),
                 ) {
                     Text(
                         text = stringResource(R.string.label_sign_in).uppercase(),
                         fontWeight = FontWeight.SemiBold,
-                        fontSize = ThreeQuarteredDoubleDefaultSp
+                        fontSize = ThreeQuarteredDoubleDefaultSp,
+                        modifier = Modifier.padding(vertical = HalfDefaultDp)
                     )
                 }
                 Spacer(Modifier.height(DefaultDp))
@@ -163,14 +164,15 @@ fun LoginScreenUI(modifier: Modifier = Modifier) {
                     colors = ButtonDefaults.buttonColors()
                         .copy(containerColor = MaterialTheme.colorScheme.secondary),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp),
+                        .fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                 ) {
                     Text(
                         text = stringResource(R.string.label_card_sign_in).uppercase(),
                         fontWeight = FontWeight.SemiBold,
-                        fontSize = ThreeQuarteredDoubleDefaultSp
+                        fontSize = ThreeQuarteredDoubleDefaultSp,
+                        modifier = Modifier
+                            .padding(vertical = HalfDefaultDp)
                     )
                 }
                 Spacer(Modifier.height(DefaultDp))

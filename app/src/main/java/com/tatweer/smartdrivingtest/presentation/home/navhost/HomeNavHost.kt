@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.tatweer.smartdrivingtest.features.driveTest.DriveTestScreen
+import com.tatweer.smartdrivingtest.presentation.driveTest.DriveTestScreen
 import com.tatweer.smartdrivingtest.presentation.studentList.StudentListScreen
 import com.tatweer.smartdrivingtest.presentation.home.HomeNavigationDestinations
 
