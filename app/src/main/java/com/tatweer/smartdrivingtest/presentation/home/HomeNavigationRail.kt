@@ -16,8 +16,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FilledIconToggleButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,16 +35,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorProducer
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tatweer.smartdrivingtest.R
-import com.tatweer.smartdrivingtest.presentation.theme.AppColors
 import com.tatweer.smartdrivingtest.presentation.theme.DefaultDp
 import com.tatweer.smartdrivingtest.presentation.theme.HalfDefaultDp
-import com.tatweer.smartdrivingtest.presentation.theme.SmartDrivingTestExaminerNewTheme
+import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
 import com.tatweer.smartdrivingtest.presentation.theme.ThreeQuarteredDoubleDefaultDp
 import kotlinx.serialization.Serializable
 
@@ -50,27 +59,32 @@ fun HomeNavigationRail(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.clip(RoundedCornerShape(ThreeQuarteredDoubleDefaultDp))) {
-        Image(
-            painterResource(R.drawable.bg_login_screen),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.matchParentSize()
-        )
-        NavigationRail(containerColor = Color.Transparent, header = {
-            Spacer(Modifier.height(HalfDefaultDp))
-            Image(
-                painterResource(R.drawable.temp_profile_pic),
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .fillMaxWidth(0.6f)
-                    .aspectRatio(1f)
-                    .border(1.dp, Color.White, CircleShape)
-            )
-            Text("Ayman Mahranin", color = Color.White)
-            Text("37801", color = Color.White)
-        }) {
+
+        NavigationRail(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            header = {
+                Spacer(Modifier.height(HalfDefaultDp))
+                Image(
+                    painterResource(R.drawable.temp_profile_pic),
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .fillMaxWidth(0.6f)
+                        .aspectRatio(1f)
+                        .border(1.dp, Color.White, CircleShape)
+                )
+                Text(
+                    "Ayman Mahranin",
+                    modifier.align(Alignment.CenterHorizontally),
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    "37801",
+                    modifier.align(Alignment.CenterHorizontally),
+                    textAlign = TextAlign.Center
+                )
+            }) {
             HomeNavigationDestinations.values().forEach {
                 HomeNavigationItem(
                     item = it,
@@ -84,18 +98,20 @@ fun HomeNavigationRail(
                 modifier = modifier
                     .clickable(onClick = onLogoutClicked)
                     .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.errorContainer)
                     .padding(horizontal = DefaultDp)
                     .padding(bottom = HalfDefaultDp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
+                Icon(
                     painter = painterResource(R.drawable.ic_logout),
                     contentDescription = null,
                     Modifier.padding(vertical = DefaultDp),
+                    tint = MaterialTheme.colorScheme.error
                 )
                 Text(
                     stringResource(R.string.logout).uppercase(),
-                    color = AppColors.LightRed
+                    color = MaterialTheme.colorScheme.error
                 )
             }
         }
@@ -105,7 +121,7 @@ fun HomeNavigationRail(
 @Preview
 @Composable
 private fun HomeNavigationRailPreview() {
-    SmartDrivingTestExaminerNewTheme {
+    AppTheme {
         var currentDestination by remember {
             mutableStateOf<HomeNavigationDestinations>(HomeNavigationDestinations.DriveTest)
         }
@@ -121,6 +137,7 @@ sealed class HomeNavigationDestinations(
     @DrawableRes val icon: Int,
     @DrawableRes val unselectedIcon: Int,
 ) {
+
     @Serializable
     data object DriveTest : HomeNavigationDestinations(
         R.string.drive_test,
@@ -129,17 +146,16 @@ sealed class HomeNavigationDestinations(
     )
 
     @Serializable
-    data object StudentList : HomeNavigationDestinations(
-        R.string.student_list,
+    data object Committee : HomeNavigationDestinations(
+        R.string.committee,
         icon = R.drawable.ic_student_list_selected,
         unselectedIcon = R.drawable.ic_student_list_unselected
     )
 
     companion object {
         fun values(): Array<HomeNavigationDestinations> {
-            return arrayOf(DriveTest, StudentList)
+            return arrayOf(DriveTest, Committee)
         }
-
     }
 }
 
@@ -151,43 +167,47 @@ fun HomeNavigationItem(
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
-    Column(
-        modifier = modifier
-            .clickable(enabled) { onDestinationSelected(item) }
-            .fillMaxWidth()
-            .background(
-                when {
-                    !enabled -> Color.LightGray.copy(alpha = 0.5f)
-                    selected -> Color.White
-                    else -> Color.Transparent
-                }
-            )
-            .padding(horizontal = DefaultDp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = if (selected)
+                MaterialTheme.colorScheme.surfaceContainer
+            else
+                Color.Transparent
+        ),
+        shape = RectangleShape,
     ) {
-        Image(
-            painter = painterResource(
-                if (selected)
-                    item.icon
-                else
-                    item.unselectedIcon
-            ),
-            contentDescription = null,
-            Modifier
-                .padding(vertical = DefaultDp)
-                .fillMaxWidth(),
-        )
-        Text(
-            stringResource(item.title),
-            color = if (selected) MaterialTheme.colorScheme.primary else Color.White
-        )
+        Column(
+            modifier = modifier
+                .clickable(enabled) { onDestinationSelected(item) }
+                .fillMaxWidth()
+                .padding(DefaultDp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            FilledIconToggleButton(selected, onCheckedChange = {
+                onDestinationSelected(item)
+            }) {
+                Icon(
+                    painter = painterResource(
+                        if (selected)
+                            item.icon
+                        else
+                            item.unselectedIcon
+                    ),
+                    contentDescription = null,
+                )
+            }
+            Text(
+                stringResource(item.title),
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 
 @Preview
 @Composable
 private fun HomeNavigationItemPreview() {
-    SmartDrivingTestExaminerNewTheme {
+    AppTheme {
         HomeNavigationItem(
             item = HomeNavigationDestinations.DriveTest,
             selected = true,

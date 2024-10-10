@@ -25,14 +25,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.tatweer.smartdrivingtest.R
 import com.tatweer.smartdrivingtest.presentation.home.navhost.HomeNavHost
-import com.tatweer.smartdrivingtest.presentation.theme.AppColors.Lotion
 import com.tatweer.smartdrivingtest.presentation.theme.DefaultDp
-import com.tatweer.smartdrivingtest.presentation.theme.SmartDrivingTestExaminerNewTheme
+import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
+import com.tatweer.smartdrivingtest.presentation.theme.HalfDefaultDp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,14 +38,18 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     Surface(modifier) {
         Row() {
             val navController = rememberNavController()
-            val currentDestination =
-                navController.currentBackStackEntryAsState().value?.toRoute<HomeNavigationDestinations>()
-                    ?: HomeNavigationDestinations.DriveTest
+            var currentDestination by remember { // TODO: Try to make it rememberSavable
+                mutableStateOf<HomeNavigationDestinations>(HomeNavigationDestinations.Committee)
+            }
             HomeNavigationRail(
                 currentDestination,
-                { navController.navigate(it) },
+                {
+                    currentDestination = it
+                    navController.navigate(it)
+                },
                 onLogoutClicked = {},
-                Modifier.width(150.dp)
+                Modifier
+                    .width(100.dp)
             )
             Column {
                 Row(
@@ -86,7 +88,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(DefaultDp),
-                    colors = CardDefaults.cardColors(containerColor = Lotion),
+//                    colors = CardDefaults.cardColors(containerColor = Lotion),
                 ) {
                     HomeNavHost(navController = navController)
                 }
@@ -98,7 +100,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 @Preview(device = Devices.TABLET)
 @Composable
 private fun HomeScreenPreview() {
-    SmartDrivingTestExaminerNewTheme {
+    AppTheme {
         HomeScreen()
     }
 }

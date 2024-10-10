@@ -18,9 +18,11 @@
         android:theme="@style/Theme.SmartDrivingTestExaminerNew"
         tools:targetApi="31">
         <activity
+            android:screenOrientation="sensorLandscape"
             android:name=".presentation.main.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.SmartDrivingTestExaminerNew">
+            android:theme="@style/Theme.SmartDrivingTestExaminerNew"
+            tools:ignore="DiscouragedApi">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

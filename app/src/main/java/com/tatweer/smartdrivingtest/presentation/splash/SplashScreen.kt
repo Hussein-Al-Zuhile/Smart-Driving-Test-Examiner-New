@@ -45,12 +45,12 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.tatweer.smartdrivingtest.R
 import com.tatweer.smartdrivingtest.presentation.theme.DoubleDefaultDp
 import com.tatweer.smartdrivingtest.presentation.theme.HalfDefaultDp
-import com.tatweer.smartdrivingtest.presentation.theme.SmartDrivingTestExaminerNewTheme
+import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
 
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun SplashScreen(modifier: Modifier = Modifier) {
+fun SplashScreen(modifier: Modifier = Modifier, onPermissionGranted: () -> Unit) {
 
     val permissionRequest = rememberMultiplePermissionsState(
         listOf(
@@ -61,6 +61,8 @@ fun SplashScreen(modifier: Modifier = Modifier) {
     LaunchedEffect(permissionRequest.allPermissionsGranted) {
         if (!permissionRequest.allPermissionsGranted) {
             permissionRequest.launchMultiplePermissionRequest()
+        } else {
+            onPermissionGranted()
         }
     }
 
@@ -68,38 +70,14 @@ fun SplashScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun SplashScreenUI(modifier: Modifier = Modifier) {
+private fun SplashScreenUI(modifier: Modifier = Modifier) {
     Box(modifier.fillMaxSize()) {
         Image(
-            painterResource(R.drawable.bg_login_screen),
+            painterResource(R.drawable.bg_splash_screen),
             contentDescription = null,
             Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
-
-        Column(
-            Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Spacer(Modifier.weight(1f))
-            Image(
-                painter = painterResource(R.drawable.logo_smart_driving_test_red),
-                contentDescription = null,
-            )
-            Spacer(
-                Modifier
-                    .weight(1f)
-                    .background(Color.White)
-            )
-            Loader()
-            Row {
-                Text("All Rights Reserved to TATWEERMEA.COM 2024", color = Color.White)
-                Spacer(Modifier.width(HalfDefaultDp))
-                Icon(Icons.Default.Copyright, contentDescription = null, tint = Color.White)
-            }
-            Spacer(Modifier.height(HalfDefaultDp))
-        }
     }
 }
 
@@ -134,7 +112,7 @@ private fun Loader() {
 @Preview(device = Devices.TABLET)
 @Composable
 private fun SplashScreenPreview() {
-    SmartDrivingTestExaminerNewTheme {
+    AppTheme {
         SplashScreenUI()
     }
 }

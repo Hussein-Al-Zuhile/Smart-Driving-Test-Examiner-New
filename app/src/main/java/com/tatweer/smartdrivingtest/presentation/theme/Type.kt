@@ -1,27 +1,52 @@
 package com.tatweer.smartdrivingtest.presentation.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 
-private val defaultTypography = Typography()
+import androidx.compose.ui.text.googlefonts.GoogleFont
+import androidx.compose.ui.text.googlefonts.Font
+import com.tatweer.smartdrivingtest.R
 
-val Typography = Typography(
-    displayLarge = defaultTypography.displayLarge.copy(fontFamily = AppFont.PoppinsFont),
-    displayMedium = defaultTypography.displayMedium.copy(fontFamily = AppFont.PoppinsFont),
-    displaySmall = defaultTypography.displaySmall.copy(fontFamily = AppFont.PoppinsFont),
-
-    headlineLarge = defaultTypography.headlineLarge.copy(fontFamily = AppFont.PoppinsFont),
-    headlineMedium = defaultTypography.headlineMedium.copy(fontFamily = AppFont.PoppinsFont),
-    headlineSmall = defaultTypography.headlineSmall.copy(fontFamily = AppFont.PoppinsFont),
-
-    titleLarge = defaultTypography.titleLarge.copy(fontFamily = AppFont.PoppinsFont),
-    titleMedium = defaultTypography.titleMedium.copy(fontFamily = AppFont.PoppinsFont),
-    titleSmall = defaultTypography.titleSmall.copy(fontFamily = AppFont.PoppinsFont),
-
-    bodyLarge = defaultTypography.bodyLarge.copy(fontFamily = AppFont.PoppinsFont),
-    bodyMedium = defaultTypography.bodyMedium.copy(fontFamily = AppFont.PoppinsFont),
-    bodySmall = defaultTypography.bodySmall.copy(fontFamily = AppFont.PoppinsFont),
-
-    labelLarge = defaultTypography.labelLarge.copy(fontFamily = AppFont.PoppinsFont),
-    labelMedium = defaultTypography.labelMedium.copy(fontFamily = AppFont.PoppinsFont),
-    labelSmall = defaultTypography.labelSmall.copy(fontFamily = AppFont.PoppinsFont)
+val provider = GoogleFont.Provider(
+    providerAuthority = "com.google.android.gms.fonts",
+    providerPackage = "com.google.android.gms",
+    certificates = R.array.com_google_android_gms_fonts_certs
 )
+
+val bodyFontFamily = FontFamily(
+
+    Font(
+        googleFont = GoogleFont("Poppins"),
+        fontProvider = provider,
+    )
+)
+
+val displayFontFamily = FontFamily(
+    Font(
+        googleFont = GoogleFont("Poppins"),
+        fontProvider = provider,
+    )
+)
+
+// Default Material 3 typography values
+val baseline = Typography()
+
+val AppTypography = Typography(
+    displayLarge = baseline.displayLarge.copy(fontFamily = displayFontFamily),
+    displayMedium = baseline.displayMedium.copy(fontFamily = displayFontFamily),
+    displaySmall = baseline.displaySmall.copy(fontFamily = displayFontFamily),
+    headlineLarge = baseline.headlineLarge.copy(fontFamily = displayFontFamily),
+    headlineMedium = baseline.headlineMedium.copy(fontFamily = displayFontFamily),
+    headlineSmall = baseline.headlineSmall.copy(fontFamily = displayFontFamily),
+    titleLarge = baseline.titleLarge.copy(fontFamily = displayFontFamily),
+    titleMedium = baseline.titleMedium.copy(fontFamily = displayFontFamily),
+    titleSmall = baseline.titleSmall.copy(fontFamily = displayFontFamily),
+    bodyLarge = baseline.bodyLarge.copy(fontFamily = bodyFontFamily),
+    bodyMedium = baseline.bodyMedium.copy(fontFamily = bodyFontFamily),
+    bodySmall = baseline.bodySmall.copy(fontFamily = bodyFontFamily),
+    labelLarge = baseline.labelLarge.copy(fontFamily = bodyFontFamily),
+    labelMedium = baseline.labelMedium.copy(fontFamily = bodyFontFamily),
+    labelSmall = baseline.labelSmall.copy(fontFamily = bodyFontFamily),
+)
+
