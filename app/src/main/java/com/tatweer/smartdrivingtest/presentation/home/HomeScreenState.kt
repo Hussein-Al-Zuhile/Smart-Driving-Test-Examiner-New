@@ -1,8 +1,8 @@
-package com.tatweer.smartdrivingtest.presentation.committee
+package com.tatweer.smartdrivingtest.presentation.home
 
 import com.tatweer.smartdrivingtest.domain.model.Student
 import com.tatweer.smartdrivingtest.presentation.base.BaseUIState
 
-data class CommitteeScreenState(
+data class HomeScreenState(
     val startedStudent: Student? = null,
 ) : BaseUIState()

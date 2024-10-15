@@ -1,6 +1,7 @@
 package com.tatweer.smartdrivingtest.presentation.driveTest.studentDetails
 
 import com.tatweer.smartdrivingtest.domain.model.Student
+import com.tatweer.smartdrivingtest.domain.model.StudentStatus
 import com.tatweer.smartdrivingtest.domain.model.TestRoute
 
 data class StudentDetailsScreenState(
@@ -9,6 +10,11 @@ data class StudentDetailsScreenState(
 ) {
     companion object {
         // TODO: Remove it when the logic is clear
-        val Initial = StudentDetailsScreenState(Student(1), TestRoute(1))
+        val Initial = StudentDetailsScreenState(Student(
+            id = 7865,
+            name = "Peter Raymond",
+            studentId = "noster",
+            status = StudentStatus.NotStarted
+        ), TestRoute(1))
     }
 }

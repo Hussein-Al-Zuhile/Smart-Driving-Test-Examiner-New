@@ -16,7 +16,7 @@ class StudentDetailsViewModel : BaseViewModel<StudentDetailsScreenStateEvent>() 
             StudentDetailsScreenEvent.OnChangeRouteClicked -> TODO()
             is StudentDetailsScreenEvent.OnRouteSelected -> TODO()
             StudentDetailsScreenEvent.OnVerifyStudentClicked -> {
-                // Handled in UI
+                _singleStateEventChannel.sendInViewModelScope(StudentDetailsScreenStateEvent.NavigateToStudentVerification)
             }
         }
     }

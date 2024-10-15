@@ -1,34 +1,32 @@
 package com.tatweer.smartdrivingtest.presentation.committee
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.tatweer.smartdrivingtest.presentation.committee.state.vehicleInspectionForm.VehicleInspectionFormScreen
 import com.tatweer.smartdrivingtest.presentation.committee.studentList.StudentListScreen
-import com.tatweer.smartdrivingtest.presentation.committee.studentList.StudentListScreenEvent
+import com.tatweer.smartdrivingtest.presentation.committee.studentList.StudentListScreenStateEvent
 import com.tatweer.smartdrivingtest.presentation.committee.studentList.StudentListViewModel
 import com.tatweer.smartdrivingtest.presentation.committee.testRouteSelection.TestRouteSelectionScreen
 import com.tatweer.smartdrivingtest.presentation.committee.testRouteSelection.TestRouteSelectionScreenEvent
 import com.tatweer.smartdrivingtest.presentation.committee.testRouteSelection.TestRouteSelectionViewModel
+import com.tatweer.smartdrivingtest.presentation.committee.vehicleInspectionForm.VehicleInspectionFormScreen
 import com.tatweer.smartdrivingtest.presentation.committee.vehicleInspectionForm.VehicleInspectionFormScreenEvent
 import com.tatweer.smartdrivingtest.presentation.committee.vehicleInspectionForm.VehicleInspectionFormViewModel
+import com.tatweer.smartdrivingtest.presentation.home.HomeScreenEvent
 import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import com.tatweer.smartdrivingtest.utils.consumeEach
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CommitteeScreen(
+    onEvent: (HomeScreenEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val committeeViewModel: CommitteeViewModel = koinViewModel()
 
     val navController = rememberNavController()
     NavHost(
@@ -39,11 +37,6 @@ fun CommitteeScreen(
 
         composable<CommitteeScreenRoute.VehicleInspectionFormRoute> {
             val viewModel: VehicleInspectionFormViewModel = koinViewModel()
-            viewModel.onEventReceived(
-                VehicleInspectionFormScreenEvent.InitialEvent(
-                    committeeViewModel.committeeScreenState.students
-                )
-            )
 
             VehicleInspectionFormScreen(viewModel.vehicleInspectionFormScreenState, { event ->
                 when (event) {
@@ -52,7 +45,7 @@ fun CommitteeScreen(
                         CommitteeScreenRoute.RouteSelectionRoute
                     )
 
-                    else -> viewModel.onEventReceived(event)
+                    else -> viewModel.onEvent(event)
                 }
             })
         }
@@ -73,21 +66,15 @@ fun CommitteeScreen(
 
         composable<CommitteeScreenRoute.StudentListRoute> {
             val viewModel: StudentListViewModel = koinViewModel()
-
-            snapshotFlow { viewModel.studentListScreenState.students }
-                .onEach {
-                    committeeViewModel.onEventReceived(CommitteeScreenEvent.OnStudentsFetched(it))
-                }.launchIn(viewModel.viewModelScope)
-
-            StudentListScreen(viewModel.studentListScreenState, { event ->
-                when (event) {
-                    StudentListScreenEvent.OnNextClicked -> {
-                        navController.navigate(CommitteeScreenRoute.VehicleInspectionFormRoute)
+            viewModel.singleStateEventChannel.consumeEach {
+                println("StudentListScreenEvent: $it")
+                when (it) {
+                    is StudentListScreenStateEvent.OnStudentTestStarted -> {
+                        onEvent(HomeScreenEvent.OnStudentTestStarted(it.student))
                     }
-
-                    else -> viewModel.onEventReceived(event)
                 }
-            })
+            }
+            StudentListScreen(viewModel.studentListScreenState, viewModel::onEvent)
         }
 
 
@@ -109,6 +96,6 @@ sealed interface CommitteeScreenRoute {
 @Composable
 private fun StudentListScreenPreview() {
     AppTheme {
-        CommitteeScreen()
+        CommitteeScreen({})
     }
 }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -31,122 +32,155 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import com.tatweer.smartdrivingtest.R
+import com.tatweer.smartdrivingtest.domain.model.Student
 import com.tatweer.smartdrivingtest.presentation.base.PreviewTablet
+import com.tatweer.smartdrivingtest.presentation.home.HomeScreenEvent
+import com.tatweer.smartdrivingtest.presentation.home.HomeScreenState
 import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
 import com.tatweer.smartdrivingtest.presentation.theme.DefaultDp
-import com.tatweer.smartdrivingtest.presentation.theme.DefaultSp
+import com.tatweer.smartdrivingtest.presentation.theme.HalfDefaultDp
 import com.tatweer.smartdrivingtest.presentation.theme.QuarterDefaultDp
 
 @Composable
 fun StudentDetailsScreen(
-    state: StudentDetailsScreenState,
-    onEvent: (StudentDetailsScreenEvent) -> Unit,
+    homeScreenState: HomeScreenState,
+    onHomeScreenEvent: (HomeScreenEvent) -> Unit,
+    onStudentDetailsScreenEvent: (StudentDetailsScreenEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier.fillMaxSize()) {
-        Card(
-            Modifier
-                .weight(1f)
-                .padding(DefaultDp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
-        ) {
-            Row(
+    homeScreenState.startedStudent?.let {
+        Column(modifier.fillMaxSize()) {
+            Card(
                 Modifier
-                    .fillMaxHeight(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
+                    .weight(1f)
+                    .padding(DefaultDp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
             ) {
-                Column(
+                Row(
                     Modifier
-                        .width(IntrinsicSize.Max)
+                        .fillMaxHeight()
                         .padding(DefaultDp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Surface(modifier = Modifier.fillMaxWidth()) {
-                        Text(
-                            "ID 2131231231231",
-                            Modifier.padding(QuarterDefaultDp),
-                            style = MaterialTheme.typography.titleLarge,
-                        )
-                    }
-                    Image(
-                        painter = painterResource(R.drawable.temp_profile_pic),
-                        contentDescription = stringResource(R.string.description_student_image),
+                    Column(
                         Modifier
-                            .clip(MaterialTheme.shapes.medium)
-                            .fillMaxHeight(0.7f)
-                    )
-                    Spacer(Modifier.height(DefaultDp))
-
-                }
-
-                Column(
-                    Modifier
-                        .weight(1f),
-                ) {
-                    Text("Name: Ahmed Mohamed")
-                    Text("Student Id: 123213123")
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.height(IntrinsicSize.Min)
+                            .width(IntrinsicSize.Max)
+                            .padding(DefaultDp)
+                            .weight(1f),
                     ) {
-                        Box(
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = HalfDefaultDp)
+                                .clip(RoundedCornerShape(HalfDefaultDp))
+                        ) {
+                            Text(
+                                "ID: ${homeScreenState.startedStudent.id}",
+                                Modifier.padding(QuarterDefaultDp),
+                                style = MaterialTheme.typography.headlineMedium,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                        Image(
+                            painter = painterResource(R.drawable.temp_profile_pic),
+                            contentDescription = stringResource(R.string.description_student_image),
                             Modifier
-                                .height(IntrinsicSize.Min)
-                                .aspectRatio(1f)
-                                .padding(QuarterDefaultDp)
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.error)
+                                .clip(MaterialTheme.shapes.medium)
+                                .fillMaxWidth(),
+                            contentScale = ContentScale.Crop
+                        )
+                        Spacer(Modifier.height(DefaultDp))
+
+                    }
+
+                    Column(
+                        Modifier
+                            .weight(1f),
+                    ) {
+                        Text(
+                            "Name: ${homeScreenState.startedStudent.name}",
+                            style = MaterialTheme.typography.headlineMedium
                         )
                         Text(
-                            "Complete",
-                            fontSize = DefaultSp
+                            "Student Id: ${homeScreenState.startedStudent.studentId}",
+                            style = MaterialTheme.typography.headlineMedium
                         )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.height(IntrinsicSize.Min)
+                        ) {
+                            Box(
+                                Modifier
+                                    .height(IntrinsicSize.Min)
+                                    .aspectRatio(1f)
+                                    .padding(QuarterDefaultDp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.error)
+                            )
+                            Text(
+                                homeScreenState.startedStudent.status.name,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+
                     }
 
-                }
-
-                Column(
-                    Modifier
-                        .width(IntrinsicSize.Max)
-                        .padding(DefaultDp)
-                        .align(Alignment.Bottom),
-                ) {
-                    Button(
-                        onClick = {onEvent(StudentDetailsScreenEvent.OnVerifyStudentClicked)},
+                    Column(
                         Modifier
+                            .width(IntrinsicSize.Max)
+                            .padding(DefaultDp)
+                            .align(Alignment.Bottom)
+                            .weight(1f),
                     ) {
-                        Text(stringResource(R.string.label_verify_student))
+                        Button(
+                            onClick = { onStudentDetailsScreenEvent(StudentDetailsScreenEvent.OnVerifyStudentClicked) },
+                            Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(6f)
+                        ) {
+                            Text(stringResource(R.string.label_verify_student))
+                        }
+                        Spacer(Modifier.height(DefaultDp))
+                        OutlinedButton(
+                            onClick = {},
+                            Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(6f)
+                        ) {
+                            Text(stringResource(R.string.label_absent))
+                        }
                     }
-                    OutlinedButton(onClick = {}, Modifier.fillMaxWidth()) {
-                        Text(stringResource(R.string.label_absent))
+                }
+
+            }
+            Card(
+                Modifier
+                    .weight(0.5f)
+                    .padding(DefaultDp),
+            ) {
+                Box {
+                    Image(
+                        painter = painterResource(R.drawable.united_arab_emirates),
+                        contentDescription = null,
+                        Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop,
+                    )
+                    FilledTonalButton(
+                        onClick = {},
+                        Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(DefaultDp)
+                    ) {
+                        Text(stringResource(R.string.label_change_route))
                     }
                 }
             }
-
         }
-        Card(
-            Modifier
-                .weight(0.5f)
-                .padding(DefaultDp),
-        ) {
-            Box {
-
-                Image(
-                    painter = painterResource(R.drawable.bg_login_screen),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
-                FilledTonalButton(
-                    onClick = {},
-                    Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(DefaultDp)
-                ) {
-                    Text(stringResource(R.string.label_change_route))
-                }
-            }
-        }
+    } ?: Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(stringResource(R.string.text_no_student_started))
     }
 }
 
@@ -154,6 +188,10 @@ fun StudentDetailsScreen(
 @Composable
 private fun PreviewUserDetailsScreen() {
     AppTheme {
-        StudentDetailsScreen(state = StudentDetailsScreenState.Initial, onEvent = {})
+        StudentDetailsScreen(
+            homeScreenState = HomeScreenState(Student.Initial),
+            onHomeScreenEvent = {},
+            onStudentDetailsScreenEvent = {}
+        )
     }
 }

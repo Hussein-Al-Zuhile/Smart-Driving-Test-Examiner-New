@@ -8,63 +8,111 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import com.tatweer.smartdrivingtest.presentation.base.PreviewTablet
+import com.tatweer.smartdrivingtest.presentation.driveTest.addManualFault.AddManualFaultDialog
 import com.tatweer.smartdrivingtest.presentation.driveTest.emergencyStop.EmergencyStopScreen
 import com.tatweer.smartdrivingtest.presentation.driveTest.emergencyStop.EmergencyStopViewModel
+import com.tatweer.smartdrivingtest.presentation.driveTest.runningTest.RunningTestScreen
+import com.tatweer.smartdrivingtest.presentation.driveTest.runningTest.RunningTestScreenStateEvent
+import com.tatweer.smartdrivingtest.presentation.driveTest.runningTest.RunningTestViewModel
 import com.tatweer.smartdrivingtest.presentation.driveTest.studentDetails.StudentDetailsScreen
-import com.tatweer.smartdrivingtest.presentation.driveTest.studentDetails.StudentDetailsScreenEvent
+import com.tatweer.smartdrivingtest.presentation.driveTest.studentDetails.StudentDetailsScreenStateEvent
 import com.tatweer.smartdrivingtest.presentation.driveTest.studentDetails.StudentDetailsViewModel
 import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerification.StudentVerificationScreen
-import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerification.StudentVerificationScreenEvent
+import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerification.StudentVerificationScreenStateEvent
 import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerification.StudentVerificationViewModel
 import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerificationSkip.StudentVerificationSkipScreen
+import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerificationSkip.StudentVerificationSkipScreenStateEvent
+import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerificationSkip.StudentVerificationSkipViewModel
+import com.tatweer.smartdrivingtest.presentation.home.HomeScreenEvent
+import com.tatweer.smartdrivingtest.presentation.home.HomeScreenState
 import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
+import com.tatweer.smartdrivingtest.utils.consumeEach
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun DriveTestScreen(modifier: Modifier = Modifier) {
+fun DriveTestScreen(
+    homeScreenState: HomeScreenState,
+    onHomeScreenEvent: (HomeScreenEvent) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val navController = rememberNavController()
+
     NavHost(navController, startDestination = DriveTestScreenDestination.UserDetails, modifier) {
         composable<DriveTestScreenDestination.UserDetails> {
             val viewModel: StudentDetailsViewModel = koinViewModel()
-            StudentDetailsScreen(
-                viewModel.studentDetailsScreenState, onEvent = {
-                    when (it) {
-                        StudentDetailsScreenEvent.OnVerifyStudentClicked -> {
-                            navController.navigate(DriveTestScreenDestination.EmergencyStop)
-                        }
-
-                        else -> viewModel.onEvent(it)
+            viewModel.singleStateEventChannel.consumeEach {
+                when (it) {
+                    StudentDetailsScreenStateEvent.NavigateToStudentVerification -> {
+                        navController.navigate(DriveTestScreenDestination.StudentVerification)
                     }
                 }
+            }
+            StudentDetailsScreen(
+                homeScreenState,
+                onHomeScreenEvent,
+                onStudentDetailsScreenEvent = viewModel::onEvent
             )
         }
-        composable<DriveTestScreenDestination.UserVerification> {
+        composable<DriveTestScreenDestination.StudentVerification> {
             val viewModel: StudentVerificationViewModel = koinViewModel()
-            StudentVerificationScreen(viewModel.studentVerificationScreenState, onEvent = {
+            viewModel.singleStateEventChannel.consumeEach {
                 when (it) {
-                    StudentVerificationScreenEvent.OnSkipClicked -> {
+                    StudentVerificationScreenStateEvent.NavigateToStudentVerificationSkip ->
                         navController.navigate(DriveTestScreenDestination.StudentVerificationSkip)
-                    }
 
-                    else -> viewModel.onEvent(it)
+                    StudentVerificationScreenStateEvent.NavigateUp -> navController.navigateUp()
                 }
-            })
+            }
+            StudentVerificationScreen(
+                viewModel.studentVerificationScreenState, onEvent = viewModel::onEvent
+            )
         }
 
         composable<DriveTestScreenDestination.StudentVerificationSkip> {
-            StudentVerificationSkipScreen()
+            val viewModel: StudentVerificationSkipViewModel = koinViewModel()
+            viewModel.singleStateEventChannel.consumeEach {
+                when (it) {
+                    StudentVerificationSkipScreenStateEvent.NavigateToRunningTest ->
+                        navController.navigate(DriveTestScreenDestination.RunningTest)
+
+                    StudentVerificationSkipScreenStateEvent.NavigateUp -> navController.navigateUp()
+                }
+            }
+            StudentVerificationSkipScreen(viewModel.state, viewModel::onEvent)
         }
 
-        dialog<DriveTestScreenDestination.EmergencyStop>(dialogProperties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
+        composable<DriveTestScreenDestination.RunningTest> {
+            val viewModel: RunningTestViewModel = koinViewModel()
+            viewModel.singleStateEventChannel.consumeEach {
+                when (it) {
+                    RunningTestScreenStateEvent.NavigateToAddManualFaultDialog ->
+                        navController.navigate(DriveTestScreenDestination.AddManualFault)
+
+                    RunningTestScreenStateEvent.NavigateToEmergencyStop ->
+                        navController.navigate(DriveTestScreenDestination.EmergencyStop)
+                }
+            }
+            RunningTestScreen(viewModel.state, viewModel::onEvent)
+        }
+
+        dialog<DriveTestScreenDestination.AddManualFault>(
+            dialogProperties = DialogProperties(
+                usePlatformDefaultWidth = false,
+            )
+        ) {
+            AddManualFaultDialog()
+        }
+
+        dialog<DriveTestScreenDestination.EmergencyStop>(
+            dialogProperties = DialogProperties(
+                usePlatformDefaultWidth = false,
+            )
+        ) {
             val viewModel: EmergencyStopViewModel = koinViewModel()
-            EmergencyStopScreen(viewModel.emergencyStopScreenState,
-                onEvent = {
-                    when(it) {
-                        else -> {
-                            viewModel.onEvent(it)
-                        }
-                    }
-                })
+            EmergencyStopScreen(
+                viewModel.emergencyStopScreenState,
+                onEvent = viewModel::onEvent
+            )
         }
     }
 }
@@ -73,6 +121,6 @@ fun DriveTestScreen(modifier: Modifier = Modifier) {
 @Composable
 private fun DriveTestScreenPreview() {
     AppTheme {
-        DriveTestScreen()
+        DriveTestScreen(HomeScreenState(), {})
     }
 }

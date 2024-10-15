@@ -1,4 +1,4 @@
-package com.tatweer.smartdrivingtest.presentation.committee.state.vehicleInspectionForm
+package com.tatweer.smartdrivingtest.presentation.committee.vehicleInspectionForm
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -29,9 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.tatweer.smartdrivingtest.R
 import com.tatweer.smartdrivingtest.presentation.base.PreviewTablet
-import com.tatweer.smartdrivingtest.presentation.base.PreviewTablets
-import com.tatweer.smartdrivingtest.presentation.committee.vehicleInspectionForm.VehicleInspectionFormScreenEvent
-import com.tatweer.smartdrivingtest.presentation.committee.vehicleInspectionForm.VehicleInspectionFormScreenState
 import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
 import com.tatweer.smartdrivingtest.presentation.theme.DefaultDp
 import com.tatweer.smartdrivingtest.presentation.theme.DoubleDefaultDp
@@ -123,6 +121,7 @@ fun VehicleInspectionFormScreen(
                 minLines = 3,
                 label = { Text(stringResource(R.string.label_system_notes_description)) })
         }
+        Spacer(Modifier.height(DefaultDp))
         Spacer(Modifier.weight(1f))
 
         Row {

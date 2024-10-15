@@ -7,16 +7,18 @@ import com.tatweer.smartdrivingtest.presentation.base.BaseViewModel
 
 class CommitteeViewModel : BaseViewModel<CommitteeScreenStateEvent>() {
 
-    var committeeScreenState by mutableStateOf(CommitteeScreenState2())
+    var committeeScreenState by mutableStateOf(CommitteeScreenState())
         private set
 
-    fun onEventReceived(event: CommitteeScreenEvent) {
+    fun onEvent(event: CommitteeScreenEvent) {
         when (event) {
-            is CommitteeScreenEvent.OnStudentsFetched -> {
-                committeeScreenState = committeeScreenState.copy(students = event.students)
+            is CommitteeScreenEvent.OnStudentTestStarted -> {
+                committeeScreenState = committeeScreenState.copy(startedStudent = event.student)
             }
 
-            else -> {}
+            CommitteeScreenEvent.OnStudentTestFinished -> {
+                committeeScreenState = committeeScreenState.copy(startedStudent = null)
+            }
         }
     }
 }

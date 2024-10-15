@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,8 +21,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.tatweer.smartdrivingtest.R
 import com.tatweer.smartdrivingtest.domain.model.Student
+import com.tatweer.smartdrivingtest.domain.model.StudentStatus
 import com.tatweer.smartdrivingtest.presentation.theme.DefaultDp
 import com.tatweer.smartdrivingtest.presentation.theme.DefaultSp
 import com.tatweer.smartdrivingtest.presentation.theme.HalfDefaultDp
@@ -59,19 +61,27 @@ import com.tatweer.smartdrivingtest.presentation.theme.ThreeQuarteredDoubleDefau
 fun StudentItem(
     student: Student,
     modifier: Modifier = Modifier,
+    selected: Boolean = false,
+    isTestStarted: Boolean = false,
+    onLongClick: (Student) -> Unit = {},
+    onAttendOnBusClick: (Student) -> Unit = {},
+    onStartTestClick: (Student) -> Unit = {},
+    onAbsentClick: (Student) -> Unit = {},
+    onDeselected: () -> Unit = {},
 ) {
-    var isLongClicked by remember { mutableStateOf(false) }
     var cardContentHeight by remember { mutableStateOf(IntSize.Zero) }
     Box {
-        Card(
+        ElevatedCard(
             modifier
                 .onSizeChanged { cardContentHeight = it }
                 .clip(CardDefaults.shape)
                 .combinedClickable(
-                    onLongClick = { isLongClicked = true },
+                    onLongClick = { onLongClick(student) },
                     onLongClickLabel = "Long Click to show the Options",
-                    onClickLabel = null
-                ) {}) {
+                    onClickLabel = null,
+                    onClick = {}
+                )
+        ) {
             Box(Modifier) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -146,7 +156,7 @@ fun StudentItem(
                         }
                     }
                 }
-                if (isLongClicked) {
+                if (selected) {
                     Column(
                         Modifier
                             .requiredSize(
@@ -158,18 +168,21 @@ fun StudentItem(
                                 }
                             )
                             .background(Gray.copy(0.5f))
-                            .onSizeChanged {
-                                println("NEW SIZE")
-                                println(it)
-                            },
+                            .clickable { onDeselected() },
                         verticalArrangement = Arrangement.SpaceEvenly,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Button(onClick = { isLongClicked = false }) {
-                            Text(stringResource(R.string.label_attend_on_bus).uppercase())
+                        if (isTestStarted) {
+                            Button(onClick = { onStartTestClick(student) }) {
+                                Text(stringResource(R.string.label_start_test).uppercase())
+                            }
+                        } else {
+                            Button(onClick = { onAttendOnBusClick(student) }) {
+                                Text(stringResource(R.string.label_attend_on_bus).uppercase())
+                            }
                         }
                         Button(
-                            onClick = { isLongClicked = false },
+                            onClick = { onAbsentClick(student) },
                             colors = ButtonDefaults.buttonColors().copy(
                                 containerColor = MaterialTheme.colorScheme.errorContainer,
                                 contentColor = MaterialTheme.colorScheme.onErrorContainer
@@ -188,6 +201,11 @@ fun StudentItem(
 @Composable
 private fun StudentCardPreview() {
     AppTheme {
-        StudentItem(Student(1))
+        StudentItem(Student(
+            id = 3932,
+            name = "Benjamin Ramos",
+            studentId = "tristique",
+            status = StudentStatus.NotStarted
+        ))
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.tatweer.smartdrivingtest.presentation.base.BaseViewModel
+import kotlin.math.sin
 
 class StudentVerificationViewModel : BaseViewModel<StudentVerificationScreenStateEvent>() {
 
@@ -12,9 +13,16 @@ class StudentVerificationViewModel : BaseViewModel<StudentVerificationScreenStat
 
     fun onEvent(event: StudentVerificationScreenEvent) {
         when (event) {
-            StudentVerificationScreenEvent.OnCancelClicked -> TODO()
+            StudentVerificationScreenEvent.OnCancelClicked -> _singleStateEventChannel.sendInViewModelScope(
+                StudentVerificationScreenStateEvent.NavigateUp
+            )
+
             is StudentVerificationScreenEvent.OnNoteChanged -> TODO()
-            StudentVerificationScreenEvent.OnSkipClicked -> TODO()
+
+            StudentVerificationScreenEvent.OnSkipClicked -> _singleStateEventChannel.sendInViewModelScope(
+                StudentVerificationScreenStateEvent.NavigateToStudentVerificationSkip
+            )
+
             StudentVerificationScreenEvent.OnTakePhotoClicked -> TODO()
         }
 

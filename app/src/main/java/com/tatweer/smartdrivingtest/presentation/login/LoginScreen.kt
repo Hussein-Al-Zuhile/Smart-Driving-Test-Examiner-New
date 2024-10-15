@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
@@ -131,18 +132,22 @@ fun LoginScreen(
                     textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
                 )
                 Spacer(Modifier.height(DoubleDefaultDp))
-                Button(
-                    onClick = {},
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                ) {
-                    Text(
-                        text = stringResource(R.string.label_sign_in).uppercase(),
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = ThreeQuarteredDoubleDefaultSp,
-                        modifier = Modifier.padding(vertical = HalfDefaultDp)
-                    )
+                if (state.isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    Button(
+                        onClick = { onEvent(LoginScreenEvent.OnSignInClicked) },
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                    ) {
+                        Text(
+                            text = stringResource(R.string.label_sign_in).uppercase(),
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = ThreeQuarteredDoubleDefaultSp,
+                            modifier = Modifier.padding(vertical = HalfDefaultDp)
+                        )
+                    }
                 }
                 Spacer(Modifier.height(DefaultDp))
                 Text(

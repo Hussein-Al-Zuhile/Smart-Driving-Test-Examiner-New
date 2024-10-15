@@ -40,4 +40,10 @@
     <string name="text_accident">Accident</string>
     <string name="text_mechanical">Mechanical</string>
     <string name="text_select_emergency_stop_reason">Select Emergency Stop Reason</string>
+    <string name="label_start_test">Start Test</string>
+    <string name="text_no_student_started">No Student Started</string>
+    <string name="label_stop">Stop</string>
+    <string name="system_health">System Health</string>
+    <string name="label_take_photo">Take Photo</string>
+    <string name="label_retry">Retry</string>
 </resources>

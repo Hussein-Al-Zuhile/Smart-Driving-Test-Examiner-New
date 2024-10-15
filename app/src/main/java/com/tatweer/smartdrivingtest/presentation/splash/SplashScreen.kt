@@ -46,11 +46,15 @@ import com.tatweer.smartdrivingtest.R
 import com.tatweer.smartdrivingtest.presentation.theme.DoubleDefaultDp
 import com.tatweer.smartdrivingtest.presentation.theme.HalfDefaultDp
 import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
+import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun SplashScreen(modifier: Modifier = Modifier, onPermissionGranted: () -> Unit) {
+fun SplashScreen(
+    onPermissionGranted: () -> Unit,
+    modifier: Modifier = Modifier
+) {
 
     val permissionRequest = rememberMultiplePermissionsState(
         listOf(
@@ -62,6 +66,7 @@ fun SplashScreen(modifier: Modifier = Modifier, onPermissionGranted: () -> Unit)
         if (!permissionRequest.allPermissionsGranted) {
             permissionRequest.launchMultiplePermissionRequest()
         } else {
+            delay(1000)
             onPermissionGranted()
         }
     }

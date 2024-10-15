@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -35,11 +36,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.tatweer.smartdrivingtest.R
 import com.tatweer.smartdrivingtest.domain.model.Student
+import com.tatweer.smartdrivingtest.domain.model.StudentStatus
 import com.tatweer.smartdrivingtest.presentation.base.PreviewTablet
 import com.tatweer.smartdrivingtest.presentation.committee.StudentItem
 import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
@@ -49,6 +52,8 @@ import com.tatweer.smartdrivingtest.presentation.theme.HalfDefaultDp
 
 @Composable
 fun StudentVerificationSkipScreen(
+    state: StudentVerificationSkipScreenState,
+    onEvent: (StudentVerificationSkipScreenEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -63,7 +68,9 @@ fun StudentVerificationSkipScreen(
         )
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             Column(Modifier.fillMaxWidth(0.25f)) {
-                StudentItem(Student(1), Modifier.fillMaxWidth())
+                StudentItem(
+                    Student.Initial, Modifier.fillMaxWidth()
+                )
                 Spacer(Modifier.height(DefaultDp))
                 OutlinedTextField(
                     "",
@@ -72,9 +79,6 @@ fun StudentVerificationSkipScreen(
                     shape = MaterialTheme.shapes.medium,
                     label = { Text(stringResource(R.string.label_add_comment)) },
                     minLines = 3,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedBorderColor = MaterialTheme.colorScheme.surfaceVariant,
-                    )
                 )
             }
             Column(
@@ -84,6 +88,7 @@ fun StudentVerificationSkipScreen(
                 Image(
                     painter = painterResource(R.drawable.temp_profile_pic),
                     contentDescription = "Student image from the camera",
+                    Modifier.clip(RoundedCornerShape(DefaultDp))
                 )
                 var isTakePhotoClicked by remember { mutableStateOf(false) }
                 val timer by animateFloatAsState(
@@ -91,7 +96,7 @@ fun StudentVerificationSkipScreen(
                     animationSpec = tween(durationMillis = 5000, easing = LinearEasing),
                     label = "Timer",
                     finishedListener = {
-
+                        onEvent(StudentVerificationSkipScreenEvent.OnPhotoTaken)
                     }
                 )
                 Spacer(Modifier.height(DefaultDp))
@@ -118,20 +123,31 @@ fun StudentVerificationSkipScreen(
                 }
 
                 Spacer(Modifier.height(DefaultDp))
-                Button({ isTakePhotoClicked = true }) {
-                    Text("Take Photo")
+                // TODO: Just mimic, need to be according to the business logic in future
+                if (!state.isPhotoTaken) {
+                    Button({ isTakePhotoClicked = true }) {
+                        Text(stringResource(R.string.label_take_photo))
+                    }
+                } else {
+                    OutlinedButton({
+                        isTakePhotoClicked = false
+                        isTakePhotoClicked = true
+                    }) {
+                        Text(stringResource(R.string.label_retry))
+                    }
                 }
             }
         }
 
         Row {
             Spacer(Modifier.weight(0.5f))
-            OutlinedButton(onClick = {}) {
+            OutlinedButton(onClick = { onEvent(StudentVerificationSkipScreenEvent.OnCancelClicked) }) {
                 Text(stringResource(R.string.label_cancel))
             }
             Spacer(Modifier.weight(1f))
             Button(
-                onClick = {},
+                onClick = { onEvent(StudentVerificationSkipScreenEvent.OnSkipScreenClicked) },
+                enabled = state.isPhotoTaken
             ) {
                 Text(stringResource(R.string.label_skip))
             }
@@ -144,6 +160,6 @@ fun StudentVerificationSkipScreen(
 @Composable
 private fun PreviewUserVerificationSkipScreen() {
     AppTheme {
-        StudentVerificationSkipScreen()
+        StudentVerificationSkipScreen(StudentVerificationSkipScreenState(), {})
     }
 }

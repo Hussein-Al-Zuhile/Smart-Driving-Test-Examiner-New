@@ -3,8 +3,11 @@ package com.tatweer.smartdrivingtest.presentation.main.navhost
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,13 +29,13 @@ fun MainNavHost(
 
     NavHost(navController = navController, startDestination = MainDestinations.Splash, modifier) {
         composable<MainDestinations.Splash> {
-            SplashScreen {
+            SplashScreen(onPermissionGranted = {
                 navController.navigate(route = MainDestinations.Login, builder = {
                     popUpTo(MainDestinations.Splash) {
                         inclusive = true
                     }
                 })
-            }
+            })
         }
 
         composable<MainDestinations.Login> {
@@ -53,10 +56,22 @@ fun MainNavHost(
             LoginScreen(viewModel.loginScreenState, viewModel::onEvent)
         }
 
-        composable<MainDestinations.Home> { HomeScreen() }
+        composable<MainDestinations.Home> {
+            CompositionLocalProvider(LocalHomeBackstackEntry provides it) {
+                HomeScreen(onLogoutClicked = {
+                    navController.navigate(MainDestinations.Login) {
+                        popUpTo(MainDestinations.Home) {
+                            inclusive = true
+                        }
+                    }
+                })
+            }
+        }
     }
 
 }
+
+val LocalHomeBackstackEntry = compositionLocalOf<NavBackStackEntry?> { null }
 
 sealed interface MainDestinations {
     @Serializable

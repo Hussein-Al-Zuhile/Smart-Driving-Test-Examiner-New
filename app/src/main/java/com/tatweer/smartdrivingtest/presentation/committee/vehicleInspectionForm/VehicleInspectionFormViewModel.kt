@@ -10,7 +10,7 @@ class VehicleInspectionFormViewModel : BaseViewModel<VehicleInspectionFormScreen
     var vehicleInspectionFormScreenState by mutableStateOf(VehicleInspectionFormScreenState())
         private set
 
-    fun onEventReceived(event: VehicleInspectionFormScreenEvent) {
+    fun onEvent(event: VehicleInspectionFormScreenEvent) {
         when (event) {
             is VehicleInspectionFormScreenEvent.InitialEvent -> {
                 vehicleInspectionFormScreenState = vehicleInspectionFormScreenState.copy(

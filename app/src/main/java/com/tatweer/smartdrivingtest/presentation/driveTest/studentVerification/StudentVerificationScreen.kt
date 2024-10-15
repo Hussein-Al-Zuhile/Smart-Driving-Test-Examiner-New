@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.tatweer.smartdrivingtest.R
 import com.tatweer.smartdrivingtest.domain.model.Student
+import com.tatweer.smartdrivingtest.domain.model.StudentStatus
 import com.tatweer.smartdrivingtest.presentation.base.PreviewTablet
 import com.tatweer.smartdrivingtest.presentation.committee.StudentItem
 import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
@@ -41,24 +42,26 @@ fun StudentVerificationScreen(
             null,
             Modifier.fillMaxWidth(0.4f)
         )
-        StudentItem(Student(1), Modifier.fillMaxWidth(0.5f))
+        StudentItem(
+            Student(
+                id = 8115,
+                name = "Dwight Montoya",
+                studentId = "vituperata",
+                status = StudentStatus.NotStarted
+            ), Modifier.fillMaxWidth(0.5f)
+        )
 
         CircularProgressIndicator()
         Text("Please put the EID on the back of the tablet to read it")
 
         Row {
             Spacer(Modifier.weight(0.5f))
-            OutlinedButton(onClick = {}) {
+            OutlinedButton(onClick = { onEvent(StudentVerificationScreenEvent.OnCancelClicked) }) {
                 Text(stringResource(R.string.label_cancel))
             }
             Spacer(Modifier.weight(1f))
-            Button(
+            OutlinedButton(
                 onClick = { onEvent(StudentVerificationScreenEvent.OnSkipClicked) },
-                colors = ButtonDefaults
-                    .buttonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    )
             ) {
                 Text(stringResource(R.string.label_skip_auto_verification))
             }

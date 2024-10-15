@@ -17,8 +17,11 @@ import com.tatweer.smartdrivingtest.presentation.committee.studentList.StudentLi
 import com.tatweer.smartdrivingtest.presentation.committee.testRouteSelection.TestRouteSelectionViewModel
 import com.tatweer.smartdrivingtest.presentation.driveTest.emergencyStop.EmergencyStopViewModel
 import com.tatweer.smartdrivingtest.presentation.committee.vehicleInspectionForm.VehicleInspectionFormViewModel
+import com.tatweer.smartdrivingtest.presentation.driveTest.runningTest.RunningTestViewModel
 import com.tatweer.smartdrivingtest.presentation.driveTest.studentDetails.StudentDetailsViewModel
 import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerification.StudentVerificationViewModel
+import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerificationSkip.StudentVerificationSkipViewModel
+import com.tatweer.smartdrivingtest.presentation.home.HomeViewModel
 import com.tatweer.smartdrivingtest.presentation.login.LoginViewModel
 import com.tatweer.smartdrivingtest.presentation.main.MainViewModel
 import org.koin.core.module.dsl.viewModelOf
@@ -49,8 +52,9 @@ val MainModule = module {
     viewModelOf(::LoginViewModel)
     //endregion
 
+    viewModelOf(::HomeViewModel)
+
     //region Committee ViewModels
-    viewModelOf(::CommitteeViewModel)
     viewModelOf(::StudentListViewModel)
     viewModelOf(::VehicleInspectionFormViewModel)
     viewModelOf(::TestRouteSelectionViewModel)
@@ -59,7 +63,9 @@ val MainModule = module {
     //region DriveTest ViewModels
     viewModelOf(::StudentDetailsViewModel)
     viewModelOf(::StudentVerificationViewModel)
+    viewModelOf(::StudentVerificationSkipViewModel)
     viewModelOf(::EmergencyStopViewModel)
+    viewModelOf(::RunningTestViewModel)
     //endregion
 
     //endregion

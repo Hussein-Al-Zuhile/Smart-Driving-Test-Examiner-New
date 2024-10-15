@@ -7,10 +7,16 @@ sealed interface DriveTestScreenDestination {
     data object UserDetails : DriveTestScreenDestination
 
     @Serializable
-    data object UserVerification : DriveTestScreenDestination
+    data object StudentVerification : DriveTestScreenDestination
 
     @Serializable
     data object StudentVerificationSkip : DriveTestScreenDestination
+
+    @Serializable
+    data object RunningTest : DriveTestScreenDestination
+
+    @Serializable
+    data object AddManualFault : DriveTestScreenDestination
 
     @Serializable
     data object EmergencyStop : DriveTestScreenDestination

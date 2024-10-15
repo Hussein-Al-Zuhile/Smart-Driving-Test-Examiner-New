@@ -31,7 +31,7 @@ class LoginViewModel : BaseViewModel<LoginScreenStateEvent>() {
             is LoginScreenEvent.OnSignInClicked -> {
                 viewModelScope.launch {
                     loginScreenState = loginScreenState.copy(isLoading = true)
-                    delay(3000)
+                    delay(1000)
                     loginScreenState = loginScreenState.copy(isLoading = false)
                     _singleStateEventChannel.send(LoginScreenStateEvent.OnLoginSucceeded("token"))
                 }
