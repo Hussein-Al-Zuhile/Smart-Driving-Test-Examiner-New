@@ -12,7 +12,7 @@ data class StudentVerificationScreenState(
             Student(
                 id = 4855,
                 name = "Isidro O'Donnell",
-                studentId = "disputationi",
+                emiratesId = "disputationi",
                 status = StudentStatus.NotStarted
             ), ""
         )

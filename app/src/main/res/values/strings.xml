@@ -46,4 +46,17 @@
     <string name="system_health">System Health</string>
     <string name="label_take_photo">Take Photo</string>
     <string name="label_retry">Retry</string>
+    <string name="label_working_systems">Working Systems</string>
+    <string name="label_failed_systems">Failed Systems</string>
+    <string name="label_all_systems">All Systems</string>
+    <string name="label_not_started">Not Started</string>
+    <string name="label_completed">Completed</string>
+    <string name="label_uncompleted">Uncompleted</string>
+    <string name="title_adding_manual_errors">Adding Manual Errors</string>
+    <string name="text_error_type">Error Type</string>
+    <string name="text_start_up">Start Up</string>
+    <string name="text_round_about_and_intersection"><![CDATA[Round about & intersection]]></string>
+    <string name="text_movement_and_parking"><![CDATA[Mevement & Parking]]></string>
+    <string name="content_description_expand">Expand</string>
+    <string name="content_description_collapse">Collapse</string>
 </resources>

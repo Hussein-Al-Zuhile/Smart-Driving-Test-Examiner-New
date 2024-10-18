@@ -1,18 +1,21 @@
 [versions]
 accompanistPermissions = "0.36.0"
-agp = "8.6.1"
+agp = "8.7.1"
+coilCompose = "3.0.0-rc01"
+coilTest = "3.0.0-rc01"
 datastorePreferences = "1.1.1"
 hivemqMqttClient = "1.3.3"
-kotlin = "2.0.0"
+kotlin = "2.0.20"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 ktorVersion = "2.3.12"
 lifecycleRuntimeKtx = "2.8.6"
-activityCompose = "1.9.2"
-composeBom = "2024.09.02"
-navigationCompose = "2.8.1"
+activityCompose = "1.9.3"
+composeBom = "2024.10.00"
+lifecycleViewmodelCompose = "2.8.6"
+navigationCompose = "2.8.3"
 orgEclipsePahoAndroidService = "1.1.1"
 orgEclipsePahoClientMqttv3 = "1.2.5"
 serialization = "1.7.3"
@@ -21,8 +24,11 @@ serialization = "1.7.3"
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+coil-test = { module = "io.coil-kt.coil3:coil-test", version.ref = "coilTest" }
 hivemq-mqtt-client = { module = "com.hivemq:hivemq-mqtt-client", version.ref = "hivemqMqttClient" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

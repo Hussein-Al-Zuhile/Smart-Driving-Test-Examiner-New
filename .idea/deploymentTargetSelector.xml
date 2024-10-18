@@ -30,6 +30,17 @@
       <SelectionState runConfigName="PreviewRunningTestScreen - PreviewTablet 1">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="PreviewSystemHealthScreen - PreviewTablet 1">
+        <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2024-10-17T07:52:36.031444Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/husseinal-zuhile/.android/avd/Pixel_Tablet_API_35.avd" />
+            </handle>
+          </Target>
+        </DropdownSelection>
+        <DialogSelection />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>

@@ -1,5 +1,7 @@
 package com.tatweer.smartdrivingtest.presentation.driveTest.studentDetails
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,19 +38,22 @@ import androidx.compose.ui.text.style.TextAlign
 import com.tatweer.smartdrivingtest.R
 import com.tatweer.smartdrivingtest.domain.model.Student
 import com.tatweer.smartdrivingtest.presentation.base.PreviewTablet
+import com.tatweer.smartdrivingtest.presentation.committee.StudentItemSharedContentKeys
 import com.tatweer.smartdrivingtest.presentation.home.HomeScreenEvent
 import com.tatweer.smartdrivingtest.presentation.home.HomeScreenState
 import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
 import com.tatweer.smartdrivingtest.presentation.theme.DefaultDp
 import com.tatweer.smartdrivingtest.presentation.theme.HalfDefaultDp
 import com.tatweer.smartdrivingtest.presentation.theme.QuarterDefaultDp
+import com.tatweer.smartdrivingtest.utils.optionalSharedElement
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun StudentDetailsScreen(
     homeScreenState: HomeScreenState,
     onHomeScreenEvent: (HomeScreenEvent) -> Unit,
     onStudentDetailsScreenEvent: (StudentDetailsScreenEvent) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     homeScreenState.startedStudent?.let {
         Column(modifier.fillMaxSize()) {
@@ -78,8 +83,10 @@ fun StudentDetailsScreen(
                                 .clip(RoundedCornerShape(HalfDefaultDp))
                         ) {
                             Text(
-                                "ID: ${homeScreenState.startedStudent.id}",
-                                Modifier.padding(QuarterDefaultDp),
+                                "ID: ${homeScreenState.startedStudent.emiratesId}",
+                                Modifier
+                                    .optionalSharedElement(StudentItemSharedContentKeys.EmiratesId)
+                                    .padding(QuarterDefaultDp),
                                 style = MaterialTheme.typography.headlineMedium,
                                 textAlign = TextAlign.Center
                             )
@@ -89,6 +96,7 @@ fun StudentDetailsScreen(
                             contentDescription = stringResource(R.string.description_student_image),
                             Modifier
                                 .clip(MaterialTheme.shapes.medium)
+                                .optionalSharedElement(StudentItemSharedContentKeys.Image)
                                 .fillMaxWidth(),
                             contentScale = ContentScale.Crop
                         )
@@ -101,16 +109,20 @@ fun StudentDetailsScreen(
                             .weight(1f),
                     ) {
                         Text(
-                            "Name: ${homeScreenState.startedStudent.name}",
-                            style = MaterialTheme.typography.headlineMedium
+                            homeScreenState.startedStudent.name,
+                            modifier = Modifier.optionalSharedElement(StudentItemSharedContentKeys.Name),
+                            style = MaterialTheme.typography.headlineMedium,
                         )
                         Text(
-                            "Student Id: ${homeScreenState.startedStudent.studentId}",
+                            homeScreenState.startedStudent.id.toString(),
+                            Modifier.optionalSharedElement(StudentItemSharedContentKeys.Id),
                             style = MaterialTheme.typography.headlineMedium
                         )
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.height(IntrinsicSize.Min)
+                            modifier = Modifier
+                                .height(IntrinsicSize.Min)
+                                .optionalSharedElement(StudentItemSharedContentKeys.Status)
                         ) {
                             Box(
                                 Modifier
@@ -121,7 +133,7 @@ fun StudentDetailsScreen(
                                     .background(MaterialTheme.colorScheme.error)
                             )
                             Text(
-                                homeScreenState.startedStudent.status.name,
+                                stringResource(homeScreenState.startedStudent.status.titleStringRes),
                                 style = MaterialTheme.typography.bodyLarge
                             )
                         }
@@ -188,10 +200,13 @@ fun StudentDetailsScreen(
 @Composable
 private fun PreviewUserDetailsScreen() {
     AppTheme {
-        StudentDetailsScreen(
-            homeScreenState = HomeScreenState(Student.Initial),
-            onHomeScreenEvent = {},
-            onStudentDetailsScreenEvent = {}
-        )
+        AnimatedContent(Unit, label = "") {
+            it
+            StudentDetailsScreen(
+                homeScreenState = HomeScreenState(Student.ForPreview),
+                onHomeScreenEvent = {},
+                onStudentDetailsScreenEvent = {},
+            )
+        }
     }
 }

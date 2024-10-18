@@ -73,7 +73,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.datastore.preferences)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -101,7 +101,10 @@ dependencies {
     implementation(libs.ktor.client.resources)
     implementation(libs.ktor.client.logging)
 
-    // hiveMQ for MQTT
+    // hiveMQ - MQTT
     implementation(libs.hivemq.mqtt.client)
     implementation(kotlin("reflect"))
+
+    // Coil - Image Loader
+    implementation(libs.coil.compose)
 }

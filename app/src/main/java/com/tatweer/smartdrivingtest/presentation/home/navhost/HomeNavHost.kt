@@ -1,6 +1,7 @@
 package com.tatweer.smartdrivingtest.presentation.home.navhost
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -12,6 +13,7 @@ import com.tatweer.smartdrivingtest.presentation.committee.CommitteeScreen
 import com.tatweer.smartdrivingtest.presentation.home.HomeNavigationDestinations
 import com.tatweer.smartdrivingtest.presentation.home.HomeScreenEvent
 import com.tatweer.smartdrivingtest.presentation.home.HomeScreenState
+import com.tatweer.smartdrivingtest.presentation.main.LocalAnimatedContentScope
 import com.tatweer.smartdrivingtest.presentation.systemHealth.SystemHealthScreen
 
 @Composable

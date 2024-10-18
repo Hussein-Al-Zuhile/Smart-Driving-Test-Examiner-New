@@ -1,7 +1,14 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.tatweer.smartdrivingtest.presentation.driveTest
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,9 +32,11 @@ import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerificationSk
 import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerificationSkip.StudentVerificationSkipViewModel
 import com.tatweer.smartdrivingtest.presentation.home.HomeScreenEvent
 import com.tatweer.smartdrivingtest.presentation.home.HomeScreenState
+import com.tatweer.smartdrivingtest.presentation.main.LocalAnimatedContentScope
 import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
-import com.tatweer.smartdrivingtest.utils.consumeEach
+import com.tatweer.smartdrivingtest.utils.ConsumeEach
 import org.koin.androidx.compose.koinViewModel
+
 
 @Composable
 fun DriveTestScreen(
@@ -37,25 +46,36 @@ fun DriveTestScreen(
 ) {
     val navController = rememberNavController()
 
-    NavHost(navController, startDestination = DriveTestScreenDestination.UserDetails, modifier) {
+    NavHost(
+        navController,
+        startDestination = DriveTestScreenDestination.UserDetails,
+        modifier,
+        enterTransition = { slideIn { IntOffset(it.width, 0) } },
+        exitTransition = { slideOut { IntOffset(-it.width, 0) } },
+        popEnterTransition = { slideIn { IntOffset(-it.width, 0) } },
+        popExitTransition = { slideOut { IntOffset(it.width, 0) } },
+    ) {
         composable<DriveTestScreenDestination.UserDetails> {
             val viewModel: StudentDetailsViewModel = koinViewModel()
-            viewModel.singleStateEventChannel.consumeEach {
+            viewModel.singleStateEventChannel.ConsumeEach {
                 when (it) {
                     StudentDetailsScreenStateEvent.NavigateToStudentVerification -> {
                         navController.navigate(DriveTestScreenDestination.StudentVerification)
                     }
                 }
             }
-            StudentDetailsScreen(
-                homeScreenState,
-                onHomeScreenEvent,
-                onStudentDetailsScreenEvent = viewModel::onEvent
-            )
+
+            CompositionLocalProvider(LocalAnimatedContentScope provides this) {
+                StudentDetailsScreen(
+                    homeScreenState,
+                    onHomeScreenEvent,
+                    onStudentDetailsScreenEvent = viewModel::onEvent,
+                )
+            }
         }
         composable<DriveTestScreenDestination.StudentVerification> {
             val viewModel: StudentVerificationViewModel = koinViewModel()
-            viewModel.singleStateEventChannel.consumeEach {
+            viewModel.singleStateEventChannel.ConsumeEach {
                 when (it) {
                     StudentVerificationScreenStateEvent.NavigateToStudentVerificationSkip ->
                         navController.navigate(DriveTestScreenDestination.StudentVerificationSkip)
@@ -63,14 +83,18 @@ fun DriveTestScreen(
                     StudentVerificationScreenStateEvent.NavigateUp -> navController.navigateUp()
                 }
             }
-            StudentVerificationScreen(
-                viewModel.studentVerificationScreenState, onEvent = viewModel::onEvent
-            )
+            CompositionLocalProvider(LocalAnimatedContentScope provides this) {
+                StudentVerificationScreen(
+                    homeScreenState,
+                    viewModel.studentVerificationScreenState,
+                    onEvent = viewModel::onEvent,
+                )
+            }
         }
 
         composable<DriveTestScreenDestination.StudentVerificationSkip> {
             val viewModel: StudentVerificationSkipViewModel = koinViewModel()
-            viewModel.singleStateEventChannel.consumeEach {
+            viewModel.singleStateEventChannel.ConsumeEach {
                 when (it) {
                     StudentVerificationSkipScreenStateEvent.NavigateToRunningTest ->
                         navController.navigate(DriveTestScreenDestination.RunningTest)
@@ -78,12 +102,14 @@ fun DriveTestScreen(
                     StudentVerificationSkipScreenStateEvent.NavigateUp -> navController.navigateUp()
                 }
             }
-            StudentVerificationSkipScreen(viewModel.state, viewModel::onEvent)
+            CompositionLocalProvider(LocalAnimatedContentScope provides this) {
+                StudentVerificationSkipScreen(homeScreenState, viewModel.state, viewModel::onEvent)
+            }
         }
 
         composable<DriveTestScreenDestination.RunningTest> {
             val viewModel: RunningTestViewModel = koinViewModel()
-            viewModel.singleStateEventChannel.consumeEach {
+            viewModel.singleStateEventChannel.ConsumeEach {
                 when (it) {
                     RunningTestScreenStateEvent.NavigateToAddManualFaultDialog ->
                         navController.navigate(DriveTestScreenDestination.AddManualFault)

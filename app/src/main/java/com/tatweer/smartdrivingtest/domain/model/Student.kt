@@ -1,19 +1,21 @@
 package com.tatweer.smartdrivingtest.domain.model
 
+import androidx.annotation.StringRes
+import com.tatweer.smartdrivingtest.R
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Student(
     val id: Int,
     val name: String,
-    val studentId: String,
+    val emiratesId: String,
     val status: StudentStatus
 ) {
     companion object {
-        val Initial = Student(
+        val ForPreview = Student(
             id = 9623,
             name = "Joesph Maldonado",
-            studentId = "vis",
+            emiratesId = "213123123",
             status = StudentStatus.NotStarted
         )
     }
@@ -21,9 +23,9 @@ data class Student(
 
 
 @Serializable
-enum class StudentStatus {
-    NotStarted,
-    Absent,
-    Complete,
-    Incomplete
+enum class StudentStatus(@StringRes val titleStringRes: Int) {
+    NotStarted(R.string.label_not_started),
+    Absent(R.string.label_absent),
+    Completed(R.string.label_completed),
+    Uncompleted(R.string.label_uncompleted)
 }

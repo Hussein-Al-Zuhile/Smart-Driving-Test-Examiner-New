@@ -67,19 +67,19 @@ class StudentListViewModel : BaseViewModel<StudentListScreenStateEvent>() {
                         Student(
                             id = 3880,
                             name = "Cedric Finch",
-                            studentId = "veniam",
+                            emiratesId = "veniam",
                             status = StudentStatus.NotStarted
                         ),
                         Student(
                             id = 6314,
                             name = "Colleen Sanchez",
-                            studentId = "eius",
+                            emiratesId = "eius",
                             status = StudentStatus.NotStarted
                         ),
                         Student(
                             id = 8114,
                             name = "Thad George",
-                            studentId = "persecuti",
+                            emiratesId = "persecuti",
                             status = StudentStatus.NotStarted
                         )
                     )

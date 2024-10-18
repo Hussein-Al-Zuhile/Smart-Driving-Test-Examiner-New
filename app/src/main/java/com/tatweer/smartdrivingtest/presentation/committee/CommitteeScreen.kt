@@ -1,9 +1,13 @@
 package com.tatweer.smartdrivingtest.presentation.committee
 
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -17,8 +21,9 @@ import com.tatweer.smartdrivingtest.presentation.committee.vehicleInspectionForm
 import com.tatweer.smartdrivingtest.presentation.committee.vehicleInspectionForm.VehicleInspectionFormScreenEvent
 import com.tatweer.smartdrivingtest.presentation.committee.vehicleInspectionForm.VehicleInspectionFormViewModel
 import com.tatweer.smartdrivingtest.presentation.home.HomeScreenEvent
+import com.tatweer.smartdrivingtest.presentation.main.LocalAnimatedContentScope
 import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
-import com.tatweer.smartdrivingtest.utils.consumeEach
+import com.tatweer.smartdrivingtest.utils.ConsumeEach
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 
@@ -32,7 +37,11 @@ fun CommitteeScreen(
     NavHost(
         navController,
         startDestination = CommitteeScreenRoute.VehicleInspectionFormRoute,
-        modifier
+        modifier,
+        enterTransition = { slideIn { IntOffset(it.width, 0) } },
+        exitTransition = { slideOut { IntOffset(-it.width, 0) } },
+        popEnterTransition = { slideIn { IntOffset(-it.width, 0) } },
+        popExitTransition = { slideOut { IntOffset(it.width, 0) } },
     ) {
 
         composable<CommitteeScreenRoute.VehicleInspectionFormRoute> {
@@ -66,8 +75,7 @@ fun CommitteeScreen(
 
         composable<CommitteeScreenRoute.StudentListRoute> {
             val viewModel: StudentListViewModel = koinViewModel()
-            viewModel.singleStateEventChannel.consumeEach {
-                println("StudentListScreenEvent: $it")
+            viewModel.singleStateEventChannel.ConsumeEach {
                 when (it) {
                     is StudentListScreenStateEvent.OnStudentTestStarted -> {
                         onEvent(HomeScreenEvent.OnStudentTestStarted(it.student))

@@ -96,19 +96,19 @@ private fun StudentListPreview() {
                     Student(
                         id = 8576,
                         name = "Shirley Rowe",
-                        studentId = "bibendum",
+                        emiratesId = "bibendum",
                         status = StudentStatus.NotStarted
                     ),
                     Student(
                         id = 8337,
                         name = "Rigoberto Pacheco",
-                        studentId = "conclusionemque",
+                        emiratesId = "conclusionemque",
                         status = StudentStatus.NotStarted
                     ),
                     Student(
                         id = 5901,
                         name = "Aldo Figueroa",
-                        studentId = "inimicus",
+                        emiratesId = "inimicus",
                         status = StudentStatus.NotStarted
                     )
                 )

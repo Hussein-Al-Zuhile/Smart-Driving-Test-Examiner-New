@@ -1,5 +1,7 @@
 package com.tatweer.smartdrivingtest.presentation.committee
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,16 +49,26 @@ import androidx.compose.ui.unit.dp
 import com.tatweer.smartdrivingtest.R
 import com.tatweer.smartdrivingtest.domain.model.Student
 import com.tatweer.smartdrivingtest.domain.model.StudentStatus
+import com.tatweer.smartdrivingtest.presentation.main.LocalSharedTransitionScope
+import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
 import com.tatweer.smartdrivingtest.presentation.theme.DefaultDp
 import com.tatweer.smartdrivingtest.presentation.theme.DefaultSp
 import com.tatweer.smartdrivingtest.presentation.theme.HalfDefaultDp
 import com.tatweer.smartdrivingtest.presentation.theme.HalfDefaultSp
 import com.tatweer.smartdrivingtest.presentation.theme.QuarterDefaultDp
-import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
 import com.tatweer.smartdrivingtest.presentation.theme.ThreeQuarteredDefaultSp
 import com.tatweer.smartdrivingtest.presentation.theme.ThreeQuarteredDoubleDefaultDp
+import com.tatweer.smartdrivingtest.utils.optionalSharedElement
 
-@OptIn(ExperimentalFoundationApi::class)
+enum class StudentItemSharedContentKeys {
+    Image,
+    Id,
+    EmiratesId,
+    Name,
+    Status,
+}
+
+@OptIn(ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun StudentItem(
     student: Student,
@@ -99,6 +111,7 @@ fun StudentItem(
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .aspectRatio(1f)
+                                .optionalSharedElement(StudentItemSharedContentKeys.Image)
                                 .padding(DefaultDp)
                                 .clip(RoundedCornerShape(ThreeQuarteredDoubleDefaultDp))
                                 .border(
@@ -106,7 +119,6 @@ fun StudentItem(
                                     color = Gray,
                                     RoundedCornerShape(ThreeQuarteredDoubleDefaultDp)
                                 )
-
                         )
                     }
                     Spacer(Modifier.width(QuarterDefaultDp))
@@ -116,30 +128,37 @@ fun StudentItem(
                     ) {
                         Surface(Modifier.clip(RoundedCornerShape(HalfDefaultDp))) {
                             Text(
-                                "1231242354",
+                                "ID: ${student.emiratesId}",
                                 Modifier
                                     .padding(
                                         horizontal = DefaultDp
-                                    ),
+                                    )
+                                    .optionalSharedElement(StudentItemSharedContentKeys.EmiratesId),
                                 color = MaterialTheme.colorScheme.secondary,
                                 fontSize = ThreeQuarteredDefaultSp,
                             )
                         }
                         Text(
-                            student.id.toString(),
+                            student.name,
                             color = MaterialTheme.colorScheme.secondary,
                             fontSize = DefaultSp,
                             maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.optionalSharedElement(
+                                StudentItemSharedContentKeys.Name
+                            )
                         )
                         Text(
-                            "ID: 7843000214290481249",
+                            student.id.toString(),
                             color = MaterialTheme.colorScheme.secondary,
-                            fontSize = HalfDefaultSp
+                            fontSize = HalfDefaultSp,
+                            modifier = Modifier.optionalSharedElement(StudentItemSharedContentKeys.Id)
                         )
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.height(IntrinsicSize.Min)
+                            modifier = Modifier
+                                .height(IntrinsicSize.Min)
+                                .optionalSharedElement(StudentItemSharedContentKeys.Status)
                         ) {
                             Box(
                                 Modifier
@@ -150,7 +169,7 @@ fun StudentItem(
                                     .background(MaterialTheme.colorScheme.error)
                             )
                             Text(
-                                "Complete",
+                                stringResource(student.status.titleStringRes),
                                 fontSize = DefaultSp
                             )
                         }
@@ -201,11 +220,13 @@ fun StudentItem(
 @Composable
 private fun StudentCardPreview() {
     AppTheme {
-        StudentItem(Student(
-            id = 3932,
-            name = "Benjamin Ramos",
-            studentId = "tristique",
-            status = StudentStatus.NotStarted
-        ))
+        StudentItem(
+            Student(
+                id = 3932,
+                name = "Benjamin Ramos",
+                emiratesId = "tristique",
+                status = StudentStatus.NotStarted
+            )
+        )
     }
 }

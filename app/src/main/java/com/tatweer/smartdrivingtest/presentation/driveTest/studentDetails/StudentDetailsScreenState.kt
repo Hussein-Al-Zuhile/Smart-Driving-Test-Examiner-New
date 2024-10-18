@@ -13,7 +13,7 @@ data class StudentDetailsScreenState(
         val Initial = StudentDetailsScreenState(Student(
             id = 7865,
             name = "Peter Raymond",
-            studentId = "noster",
+            emiratesId = "noster",
             status = StudentStatus.NotStarted
         ), TestRoute(1))
     }
