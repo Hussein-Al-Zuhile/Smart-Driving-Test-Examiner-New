@@ -37,6 +37,7 @@ class RunningTestViewModel : BaseViewModel<RunningTestScreenStateEvent>() {
         }
 
         RunningTestScreenEvent.OnStopTest -> {
+            _singleStateEventChannel.sendInViewModelScope(RunningTestScreenStateEvent.NavigateToSummary)
         }
 
         RunningTestScreenEvent.OnEmergencyStop -> {

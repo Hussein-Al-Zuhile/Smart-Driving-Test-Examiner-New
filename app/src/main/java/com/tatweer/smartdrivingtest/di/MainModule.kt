@@ -17,6 +17,7 @@ import com.tatweer.smartdrivingtest.presentation.committee.studentList.StudentLi
 import com.tatweer.smartdrivingtest.presentation.committee.testRouteSelection.TestRouteSelectionViewModel
 import com.tatweer.smartdrivingtest.presentation.driveTest.emergencyStop.EmergencyStopViewModel
 import com.tatweer.smartdrivingtest.presentation.committee.vehicleInspectionForm.VehicleInspectionFormViewModel
+import com.tatweer.smartdrivingtest.presentation.driveTest.addManualFault.AddManualFaultViewModel
 import com.tatweer.smartdrivingtest.presentation.driveTest.runningTest.RunningTestViewModel
 import com.tatweer.smartdrivingtest.presentation.driveTest.studentDetails.StudentDetailsViewModel
 import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerification.StudentVerificationViewModel
@@ -66,6 +67,7 @@ val MainModule = module {
     viewModelOf(::StudentVerificationSkipViewModel)
     viewModelOf(::EmergencyStopViewModel)
     viewModelOf(::RunningTestViewModel)
+    viewModelOf(::AddManualFaultViewModel)
     //endregion
 
     //endregion

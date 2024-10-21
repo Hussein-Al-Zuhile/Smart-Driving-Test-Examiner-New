@@ -20,4 +20,7 @@ sealed interface DriveTestScreenDestination {
 
     @Serializable
     data object EmergencyStop : DriveTestScreenDestination
+
+    @Serializable
+    data object Summary : DriveTestScreenDestination
 }

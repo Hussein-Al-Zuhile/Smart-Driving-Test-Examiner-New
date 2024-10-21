@@ -5,6 +5,7 @@ package com.tatweer.smartdrivingtest.presentation.driveTest
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
+import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -16,6 +17,8 @@ import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import com.tatweer.smartdrivingtest.presentation.base.PreviewTablet
 import com.tatweer.smartdrivingtest.presentation.driveTest.addManualFault.AddManualFaultDialog
+import com.tatweer.smartdrivingtest.presentation.driveTest.addManualFault.AddManualFaultDialogStateEvent
+import com.tatweer.smartdrivingtest.presentation.driveTest.addManualFault.AddManualFaultViewModel
 import com.tatweer.smartdrivingtest.presentation.driveTest.emergencyStop.EmergencyStopScreen
 import com.tatweer.smartdrivingtest.presentation.driveTest.emergencyStop.EmergencyStopViewModel
 import com.tatweer.smartdrivingtest.presentation.driveTest.runningTest.RunningTestScreen
@@ -30,6 +33,7 @@ import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerification.S
 import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerificationSkip.StudentVerificationSkipScreen
 import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerificationSkip.StudentVerificationSkipScreenStateEvent
 import com.tatweer.smartdrivingtest.presentation.driveTest.studentVerificationSkip.StudentVerificationSkipViewModel
+import com.tatweer.smartdrivingtest.presentation.driveTest.summary.SummaryScreen
 import com.tatweer.smartdrivingtest.presentation.home.HomeScreenEvent
 import com.tatweer.smartdrivingtest.presentation.home.HomeScreenState
 import com.tatweer.smartdrivingtest.presentation.main.LocalAnimatedContentScope
@@ -116,17 +120,12 @@ fun DriveTestScreen(
 
                     RunningTestScreenStateEvent.NavigateToEmergencyStop ->
                         navController.navigate(DriveTestScreenDestination.EmergencyStop)
+
+                    RunningTestScreenStateEvent.NavigateToSummary ->
+                        navController.navigate(DriveTestScreenDestination.Summary)
                 }
             }
             RunningTestScreen(viewModel.state, viewModel::onEvent)
-        }
-
-        dialog<DriveTestScreenDestination.AddManualFault>(
-            dialogProperties = DialogProperties(
-                usePlatformDefaultWidth = false,
-            )
-        ) {
-            AddManualFaultDialog()
         }
 
         dialog<DriveTestScreenDestination.EmergencyStop>(
@@ -139,6 +138,10 @@ fun DriveTestScreen(
                 viewModel.emergencyStopScreenState,
                 onEvent = viewModel::onEvent
             )
+        }
+
+        composable<DriveTestScreenDestination.Summary> {
+            SummaryScreen(onHomeScreenEvent)
         }
     }
 }

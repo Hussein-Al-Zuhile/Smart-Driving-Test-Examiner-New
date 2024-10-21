@@ -16,8 +16,9 @@ class HomeViewModel : BaseViewModel<HomeScreenStateEvent>() {
                 homeScreenState = homeScreenState.copy(startedStudent = event.student)
             }
 
-            is HomeScreenEvent.OnStudentTestFinished -> {
+            is HomeScreenEvent.OnStudentTestSubmitted -> {
                 homeScreenState = homeScreenState.copy(startedStudent = null)
+                _singleStateEventChannel.sendInViewModelScope(HomeScreenStateEvent.PopBackToStudentList)
             }
         }
     }

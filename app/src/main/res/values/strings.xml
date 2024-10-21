@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hussein Code Base</string>
+    <string name="app_name">Smart Driving Test System</string>
     <string name="logout">Logout</string>
     <string name="drive_test">Drive Test</string>
     <string name="committee">Committee</string>
@@ -29,7 +29,7 @@
     <string name="description_student_image">Student Image</string>
     <string name="label_change_route">Change Route</string>
     <string name="label_skip_auto_verification">Skip Auto Verification</string>
-    <string name="label_add_comment">Add Comment...</string>
+    <string name="label_add_comment">Add Comment…</string>
     <string name="label_skip">Skip</string>
     <string name="text_min">Min</string>
     <string name="text_second">Second</string>
@@ -59,4 +59,8 @@
     <string name="text_movement_and_parking"><![CDATA[Mevement & Parking]]></string>
     <string name="content_description_expand">Expand</string>
     <string name="content_description_collapse">Collapse</string>
+    <string name="text_errors">Errors</string>
+    <string name="label_all_faults">All Faults</string>
+    <string name="label_by_examiner">By Examiner</string>
+    <string name="label_by_system">By System</string>
 </resources>

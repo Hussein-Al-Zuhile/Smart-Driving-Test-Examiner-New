@@ -26,6 +26,7 @@ import com.tatweer.smartdrivingtest.presentation.base.PreviewTablet
 import com.tatweer.smartdrivingtest.presentation.home.navhost.HomeNavHost
 import com.tatweer.smartdrivingtest.presentation.theme.DefaultDp
 import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
+import com.tatweer.smartdrivingtest.utils.ConsumeEach
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -35,6 +36,17 @@ fun HomeScreen(modifier: Modifier = Modifier, onLogoutClicked: () -> Unit) {
     Surface(modifier.padding(DefaultDp)) {
         Row {
             val navController = rememberNavController()
+            viewModel.singleStateEventChannel.ConsumeEach {
+                when (it) {
+                    HomeScreenStateEvent.PopBackToStudentList -> {
+                        navController.popBackStack(
+                            HomeNavigationDestinations.Committee,
+                            inclusive = false
+                        )
+                    }
+                }
+            }
+
             val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
             var currentDestination = remember(currentNavBackStackEntry) {
                 HomeNavigationDestinations.fromRoute(
