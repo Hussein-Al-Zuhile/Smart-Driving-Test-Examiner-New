@@ -2,7 +2,9 @@
 
 package com.tatweer.smartdrivingtest.presentation.driveTest
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
 import androidx.compose.foundation.clickable
@@ -54,10 +56,28 @@ fun DriveTestScreen(
         navController,
         startDestination = DriveTestScreenDestination.UserDetails,
         modifier,
-        enterTransition = { slideIn { IntOffset(it.width, 0) } },
-        exitTransition = { slideOut { IntOffset(-it.width, 0) } },
-        popEnterTransition = { slideIn { IntOffset(-it.width, 0) } },
-        popExitTransition = { slideOut { IntOffset(it.width, 0) } },
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Start,
+                tween(500)
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Start, tween(500)
+            )
+        },
+        popEnterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.End, tween(500)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.End,
+                tween(500)
+            )
+        },
     ) {
         composable<DriveTestScreenDestination.UserDetails> {
             val viewModel: StudentDetailsViewModel = koinViewModel()
@@ -115,8 +135,6 @@ fun DriveTestScreen(
             val viewModel: RunningTestViewModel = koinViewModel()
             viewModel.singleStateEventChannel.ConsumeEach {
                 when (it) {
-                    RunningTestScreenStateEvent.NavigateToAddManualFaultDialog ->
-                        navController.navigate(DriveTestScreenDestination.AddManualFault)
 
                     RunningTestScreenStateEvent.NavigateToEmergencyStop ->
                         navController.navigate(DriveTestScreenDestination.EmergencyStop)

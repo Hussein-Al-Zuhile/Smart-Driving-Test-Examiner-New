@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.tatweer.smartdrivingtest.presentation.base.BaseViewModel
+import com.tatweer.smartdrivingtest.utils.LocaleManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -39,6 +40,10 @@ class LoginViewModel : BaseViewModel<LoginScreenStateEvent>() {
 
             is LoginScreenEvent.OnCardSignInDetected -> {
                 // Handle card sign-in logic
+            }
+
+            is LoginScreenEvent.OnLanguageChanged -> {
+                LocaleManager.setCurrentLanguage(event.locale)
             }
         }
     }

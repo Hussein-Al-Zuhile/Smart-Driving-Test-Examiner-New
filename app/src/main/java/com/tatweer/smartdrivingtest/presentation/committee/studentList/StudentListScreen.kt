@@ -13,6 +13,7 @@ import androidx.compose.material.icons.automirrored.filled.Forward
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -78,6 +79,8 @@ fun StudentListScreen(
                             .padding(DefaultDp),
                         text = { Text(stringResource(R.string.label_start_test)) },
                         icon = { Icon(Icons.AutoMirrored.Filled.Forward, "Next") },
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }

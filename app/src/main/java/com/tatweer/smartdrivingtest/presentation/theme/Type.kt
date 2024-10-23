@@ -15,7 +15,6 @@ val provider = GoogleFont.Provider(
 )
 
 val bodyFontFamily = FontFamily(
-
     Font(
         googleFont = GoogleFont("Poppins"),
         fontProvider = provider,
@@ -33,20 +32,65 @@ val displayFontFamily = FontFamily(
 val baseline = Typography()
 
 val AppTypography = Typography(
-    displayLarge = baseline.displayLarge.copy(fontFamily = displayFontFamily),
-    displayMedium = baseline.displayMedium.copy(fontFamily = displayFontFamily),
-    displaySmall = baseline.displaySmall.copy(fontFamily = displayFontFamily),
-    headlineLarge = baseline.headlineLarge.copy(fontFamily = displayFontFamily),
-    headlineMedium = baseline.headlineMedium.copy(fontFamily = displayFontFamily),
-    headlineSmall = baseline.headlineSmall.copy(fontFamily = displayFontFamily),
-    titleLarge = baseline.titleLarge.copy(fontFamily = displayFontFamily),
-    titleMedium = baseline.titleMedium.copy(fontFamily = displayFontFamily),
-    titleSmall = baseline.titleSmall.copy(fontFamily = displayFontFamily),
-    bodyLarge = baseline.bodyLarge.copy(fontFamily = bodyFontFamily),
-    bodyMedium = baseline.bodyMedium.copy(fontFamily = bodyFontFamily),
-    bodySmall = baseline.bodySmall.copy(fontFamily = bodyFontFamily),
-    labelLarge = baseline.labelLarge.copy(fontFamily = bodyFontFamily),
-    labelMedium = baseline.labelMedium.copy(fontFamily = bodyFontFamily),
-    labelSmall = baseline.labelSmall.copy(fontFamily = bodyFontFamily),
+    displayLarge = baseline.displayLarge.copy(
+        fontFamily = displayFontFamily,
+        fontSize = baseline.displayLarge.fontSize.times(1.25)
+    ),
+    displayMedium = baseline.displayMedium.copy(
+        fontFamily = displayFontFamily,
+        fontSize = baseline.displayMedium.fontSize.times(1.25)
+    ),
+    displaySmall = baseline.displaySmall.copy(
+        fontFamily = displayFontFamily,
+        fontSize = baseline.displaySmall.fontSize.times(1.25)
+    ),
+    headlineLarge = baseline.headlineLarge.copy(
+        fontFamily = displayFontFamily,
+        fontSize = baseline.headlineLarge.fontSize.times(1.25)
+    ),
+    headlineMedium = baseline.headlineMedium.copy(
+        fontFamily = displayFontFamily,
+        fontSize = baseline.headlineMedium.fontSize.times(1.25)
+    ),
+    headlineSmall = baseline.headlineSmall.copy(
+        fontFamily = displayFontFamily,
+        fontSize = baseline.headlineSmall.fontSize.times(1.25)
+    ),
+    titleLarge = baseline.titleLarge.copy(
+        fontFamily = displayFontFamily,
+        fontSize = baseline.titleLarge.fontSize.times(1.25)
+    ),
+    titleMedium = baseline.titleMedium.copy(
+        fontFamily = displayFontFamily,
+        fontSize = baseline.titleMedium.fontSize.times(1.25)
+    ),
+    titleSmall = baseline.titleSmall.copy(
+        fontFamily = displayFontFamily,
+        fontSize = baseline.titleSmall.fontSize.times(1.25)
+    ),
+    bodyLarge = baseline.bodyLarge.copy(
+        fontFamily = bodyFontFamily,
+        fontSize = baseline.bodyLarge.fontSize.times(1.25)
+    ),
+    bodyMedium = baseline.bodyMedium.copy(
+        fontFamily = bodyFontFamily,
+        fontSize = baseline.bodyMedium.fontSize.times(1.25)
+    ),
+    bodySmall = baseline.bodySmall.copy(
+        fontFamily = bodyFontFamily,
+        fontSize = baseline.bodySmall.fontSize.times(1.25)
+    ),
+    labelLarge = baseline.labelLarge.copy(
+        fontFamily = bodyFontFamily,
+        fontSize = baseline.labelLarge.fontSize.times(1.25)
+    ),
+    labelMedium = baseline.labelMedium.copy(
+        fontFamily = bodyFontFamily,
+        fontSize = baseline.labelMedium.fontSize.times(1.25)
+    ),
+    labelSmall = baseline.labelSmall.copy(
+        fontFamily = bodyFontFamily,
+        fontSize = baseline.labelSmall.fontSize.times(1.25)
+    ),
 )
 

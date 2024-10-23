@@ -81,13 +81,13 @@ fun VehicleInspectionFormScreen(
             Spacer(Modifier.weight(1f))
             var isMechanicalError by remember { mutableStateOf(false) }
             Text(
-                "Car Mechanical Error",
+                stringResource(R.string.label_car_mechanical_error),
                 Modifier.clickable { isMechanicalError = !isMechanicalError })
             Spacer(Modifier.width(HalfDefaultDp))
             Switch(isMechanicalError, { isMechanicalError = it })
             Spacer(Modifier.weight(1f))
             var unClean by remember { mutableStateOf(false) }
-            Text("Car Mechanical Error", Modifier.clickable { unClean = !unClean })
+            Text(stringResource(R.string.label_unclean), Modifier.clickable { unClean = !unClean })
             Spacer(Modifier.width(HalfDefaultDp))
             Switch(unClean, { unClean = it })
         }

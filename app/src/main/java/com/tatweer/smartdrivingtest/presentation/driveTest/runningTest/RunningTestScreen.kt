@@ -27,6 +27,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -64,7 +65,10 @@ fun RunningTestScreen(
     Box {
         Column(modifier.background(MaterialTheme.colorScheme.surface)) {
             Row(Modifier.weight(1f)) {
-                Card(Modifier.fillMaxWidth(0.4f)) {
+                Surface(
+                    Modifier.fillMaxWidth(0.4f),
+                    color = MaterialTheme.colorScheme.secondaryContainer
+                ) {
                     LazyColumn(
                         contentPadding = PaddingValues(DefaultDp),
                         verticalArrangement = Arrangement.spacedBy(

@@ -11,7 +11,7 @@
     <string name="text_privacy_policy">ABU DHABI Police Departement values the privacy of our users. Therefore, this privacy policy explains in detail how we use and protect the information we collect when you visit our Mobile App, as well as our Web Portal. Read this privacy policy completely. Please refrain from visiting the site if the terms outlined below are not satisfactory to you.</string>
     <string name="text_or">Or</string>
     <string name="label_card_sign_in">Signin with Examiner ID Card</string>
-    <string name="label_for_arabic_click_here">للغة العربية إضغط هنا</string>
+    <string name="label_for_changing_language_click_here">للغة العربية إضغط هنا</string>
     <string name="label_next">Next</string>
     <string name="text_vehicle_inspection_form">Vehicle Inspection Form</string>
     <string name="text_commission">Commission</string>
@@ -63,4 +63,7 @@
     <string name="label_all_faults">All Faults</string>
     <string name="label_by_examiner">By Examiner</string>
     <string name="label_by_system">By System</string>
+    <string name="label_car_mechanical_error">Car Mechanical Error</string>
+    <string name="label_unclean">Unclean</string>
+    <string name="label_submit">Submit</string>
 </resources>

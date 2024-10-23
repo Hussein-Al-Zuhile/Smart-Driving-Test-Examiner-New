@@ -28,7 +28,7 @@ class RunningTestViewModel : BaseViewModel<RunningTestScreenStateEvent>() {
 
         RunningTestScreenEvent.OnAddManualFault -> {
             state = state.copy(isTestStarted = false)
-            _singleStateEventChannel.sendInViewModelScope(RunningTestScreenStateEvent.NavigateToAddManualFaultDialog)
+//            _singleStateEventChannel.sendInViewModelScope(RunningTestScreenStateEvent.NavigateToAddManualFaultDialog)
         }
 
         RunningTestScreenEvent.OnStartTest -> {

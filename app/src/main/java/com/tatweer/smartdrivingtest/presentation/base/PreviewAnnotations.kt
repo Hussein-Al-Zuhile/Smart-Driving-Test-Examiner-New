@@ -10,6 +10,13 @@ import androidx.compose.ui.tooling.preview.Preview
     showBackground = true,
     uiMode = UI_MODE_NIGHT_YES
 )
+@Preview(device = "spec:width=1280dp,height=800dp,dpi=240", showBackground = true, locale = "ar")
+@Preview(
+    device = "spec:width=1280dp,height=800dp,dpi=240",
+    showBackground = true,
+    uiMode = UI_MODE_NIGHT_YES,
+    locale = "ar"
+)
 annotation class PreviewTablet
 
 @Preview(name = "85%", fontScale = 0.85f, device = "spec:width=1280dp,height=800dp,dpi=240")

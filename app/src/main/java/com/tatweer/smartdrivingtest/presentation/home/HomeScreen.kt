@@ -1,6 +1,7 @@
 package com.tatweer.smartdrivingtest.presentation.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,7 +36,7 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(modifier: Modifier = Modifier, onLogoutClicked: () -> Unit) {
 
     val viewModel: HomeViewModel = koinViewModel()
-    Surface(modifier.padding(DefaultDp)) {
+    Box(modifier.padding(DefaultDp)) {
         Row {
             val navController = rememberNavController()
             viewModel.singleStateEventChannel.ConsumeEach {
@@ -68,7 +71,7 @@ fun HomeScreen(modifier: Modifier = Modifier, onLogoutClicked: () -> Unit) {
                 onLogoutClicked = onLogoutClicked,
                 viewModel.homeScreenState.startedStudent != null,
                 Modifier
-                    .width(110.dp)
+                    .width(120.dp)
             )
             Column(
                 Modifier
@@ -88,6 +91,7 @@ fun HomeScreen(modifier: Modifier = Modifier, onLogoutClicked: () -> Unit) {
                 Card(
                     modifier = Modifier
                         .fillMaxSize(),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
                     HomeNavHost(
                         navController = navController,

@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -40,18 +42,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.tatweer.smartdrivingtest.R
 import com.tatweer.smartdrivingtest.domain.model.Student
 import com.tatweer.smartdrivingtest.presentation.base.PreviewTablet
 import com.tatweer.smartdrivingtest.presentation.base.component.BigButton
+import com.tatweer.smartdrivingtest.presentation.base.component.BigOutlinedButton
 import com.tatweer.smartdrivingtest.presentation.committee.StudentItemSharedContentKeys
+import com.tatweer.smartdrivingtest.presentation.driveTest.addManualFault.AddManualFaultDialog
+import com.tatweer.smartdrivingtest.presentation.driveTest.addManualFault.AddManualFaultDialogStateEvent
+import com.tatweer.smartdrivingtest.presentation.driveTest.addManualFault.AddManualFaultViewModel
 import com.tatweer.smartdrivingtest.presentation.driveTest.runningTest.FaultItem
 import com.tatweer.smartdrivingtest.presentation.home.HomeScreenEvent
 import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
 import com.tatweer.smartdrivingtest.presentation.theme.DefaultDp
 import com.tatweer.smartdrivingtest.presentation.theme.HalfDefaultDp
 import com.tatweer.smartdrivingtest.presentation.theme.QuarterDefaultDp
+import com.tatweer.smartdrivingtest.utils.ConsumeEach
 import com.tatweer.smartdrivingtest.utils.optionalSharedElement
+import org.koin.androidx.compose.koinViewModel
 
 private enum class Tab(@StringRes val titleResource: Int) {
     AllFaults(R.string.label_all_faults),
@@ -64,9 +74,35 @@ fun SummaryScreen(
     onHomeScreenEvent: (HomeScreenEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier.fillMaxSize()) {
-        Sidebar(Student.ForPreview,onHomeScreenEvent, Modifier.fillMaxWidth(0.25f))
-        FaultyStudentsList()
+    var isAddManualFaultDialogOpen by rememberSaveable { mutableStateOf(false) }
+    Box {
+        Row(modifier.fillMaxSize()) {
+            Sidebar(Student.ForPreview, onHomeScreenEvent, onAddManualFaultClicked = {
+                isAddManualFaultDialogOpen = true
+            }, Modifier.fillMaxWidth(0.25f))
+            FaultyStudentsList()
+        }
+
+        if (isAddManualFaultDialogOpen) {
+            Dialog(
+                onDismissRequest = { isAddManualFaultDialogOpen = false },
+                properties = DialogProperties(usePlatformDefaultWidth = false)
+            ) {
+                val viewModel: AddManualFaultViewModel = koinViewModel()
+                viewModel.singleStateEventChannel.ConsumeEach {
+                    when (it) {
+                        AddManualFaultDialogStateEvent.NavigateUp -> isAddManualFaultDialogOpen =
+                            false
+
+                        is AddManualFaultDialogStateEvent.ConfirmEditingFaults -> {
+                            // Handle calling API to add manual faults
+                            isAddManualFaultDialogOpen = false
+                        }
+                    }
+                }
+                AddManualFaultDialog(viewModel.state, viewModel::onEvent)
+            }
+        }
     }
 }
 
@@ -133,6 +169,7 @@ fun FaultyStudentsList(modifier: Modifier = Modifier) {
 private fun Sidebar(
     student: Student,
     onHomeScreenEvent: (HomeScreenEvent) -> Unit,
+    onAddManualFaultClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -140,10 +177,14 @@ private fun Sidebar(
             .fillMaxHeight()
             .padding(DefaultDp)
     ) {
+        val scrollState = rememberScrollState()
         Column(
-            modifier = Modifier.fillMaxHeight(),
+            modifier = Modifier
+                .fillMaxHeight()
+                .verticalScroll(scrollState)
+                .padding(DefaultDp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(DefaultDp),
         ) {
             Image(
                 painterResource(R.drawable.temp_profile_pic),
@@ -152,21 +193,19 @@ private fun Sidebar(
                     .fillMaxWidth()
                     .aspectRatio(1.5f)
                     .clip(RoundedCornerShape(DefaultDp))
-                    .optionalSharedElement(StudentItemSharedContentKeys.Image)
+                    .optionalSharedElement(StudentItemSharedContentKeys.Image),
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
             )
 
             Surface(
                 modifier = Modifier
-                    .padding(DefaultDp)
                     .fillMaxWidth()
-                    .padding(bottom = HalfDefaultDp)
                     .clip(RoundedCornerShape(HalfDefaultDp))
             ) {
                 Text(
                     "ID: ${student.emiratesId}",
                     Modifier
-                        .optionalSharedElement(StudentItemSharedContentKeys.EmiratesId)
-                        .padding(QuarterDefaultDp),
+                        .optionalSharedElement(StudentItemSharedContentKeys.EmiratesId),
                     style = MaterialTheme.typography.headlineMedium,
                     textAlign = TextAlign.Center
                 )
@@ -187,7 +226,6 @@ private fun Sidebar(
                 style = MaterialTheme.typography.displayLarge,
                 color = MaterialTheme.colorScheme.error
             )
-            Spacer(Modifier.height(HalfDefaultDp))
             Text(
                 stringResource(R.string.text_errors).uppercase(),
                 style = MaterialTheme.typography.displayLarge,
@@ -195,8 +233,13 @@ private fun Sidebar(
             )
             Text("Accepted: 03", style = MaterialTheme.typography.titleLarge)
             Text("Rejected: 01", style = MaterialTheme.typography.titleLarge)
-            BigButton(onClick = {onHomeScreenEvent(HomeScreenEvent.OnStudentTestSubmitted(""))}) {
-                Text("Submit")
+            Text("Time: 21:20", style = MaterialTheme.typography.titleLarge)
+
+            BigOutlinedButton(onClick = onAddManualFaultClicked) {
+                Text(stringResource(R.string.label_add_manual_fault))
+            }
+            BigButton(onClick = { onHomeScreenEvent(HomeScreenEvent.OnStudentTestSubmitted("")) }) {
+                Text(stringResource(R.string.label_submit))
             }
         }
     }

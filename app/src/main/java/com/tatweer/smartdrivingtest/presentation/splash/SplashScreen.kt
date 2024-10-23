@@ -76,14 +76,12 @@ fun SplashScreen(
 
 @Composable
 private fun SplashScreenUI(modifier: Modifier = Modifier) {
-    Box(modifier.fillMaxSize()) {
-        Image(
-            painterResource(R.drawable.bg_splash_screen),
-            contentDescription = null,
-            Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-    }
+    Image(
+        painterResource(R.drawable.bg_splash_screen),
+        contentDescription = null,
+        modifier.fillMaxSize(),
+        contentScale = ContentScale.Crop
+    )
 }
 
 @Composable

@@ -1,5 +1,7 @@
 package com.tatweer.smartdrivingtest.presentation.committee
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
 import androidx.compose.runtime.Composable
@@ -38,10 +40,28 @@ fun CommitteeScreen(
         navController,
         startDestination = CommitteeScreenRoute.VehicleInspectionFormRoute,
         modifier,
-        enterTransition = { slideIn { IntOffset(it.width, 0) } },
-        exitTransition = { slideOut { IntOffset(-it.width, 0) } },
-        popEnterTransition = { slideIn { IntOffset(-it.width, 0) } },
-        popExitTransition = { slideOut { IntOffset(it.width, 0) } },
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Start,
+                tween(500)
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Start, tween(500)
+            )
+        },
+        popEnterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.End, tween(500)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.End,
+                tween(500)
+            )
+        },
     ) {
 
         composable<CommitteeScreenRoute.VehicleInspectionFormRoute> {

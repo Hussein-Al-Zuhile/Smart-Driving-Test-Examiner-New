@@ -1,3 +1,7 @@
+import org.jetbrains.kotlin.load.kotlin.signatures
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -23,13 +27,35 @@ android {
         }
     }
 
+    signingConfigs {
+        val keyStoreProperties =
+            getKeystoreProperties(rootProject.file("tempKeystoreProperties.properties"))
+        getByName("debug") {
+            keyAlias = keyStoreProperties.getProperty("keyAlias")
+            keyPassword = keyStoreProperties.getProperty("keyPassword")
+            storeFile = rootProject.file(keyStoreProperties.getProperty("storeFile"))
+            storePassword = keyStoreProperties.getProperty("storePassword")
+        }
+        create("release") {
+            keyAlias = keyStoreProperties.getProperty("keyAlias")
+            keyPassword = keyStoreProperties.getProperty("keyPassword")
+            storeFile = rootProject.file(keyStoreProperties.getProperty("storeFile"))
+            storePassword = keyStoreProperties.getProperty("storePassword")
+        }
+    }
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+            signingConfig = signingConfigs.getByName("debug")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -107,4 +133,12 @@ dependencies {
 
     // Coil - Image Loader
     implementation(libs.coil.compose)
+}
+
+fun getKeystoreProperties(file: File): Properties {
+    val props = Properties()
+    if (file.exists()) {
+        FileInputStream(file).use { props.load(it) }
+    }
+    return props
 }

@@ -82,133 +82,132 @@ fun StudentItem(
     onDeselected: () -> Unit = {},
 ) {
     var cardContentHeight by remember { mutableStateOf(IntSize.Zero) }
-    Box {
-        ElevatedCard(
-            modifier
-                .onSizeChanged { cardContentHeight = it }
-                .clip(CardDefaults.shape)
-                .combinedClickable(
-                    onLongClick = { onLongClick(student) },
-                    onLongClickLabel = "Long Click to show the Options",
-                    onClickLabel = null,
-                    onClick = {}
-                )
-        ) {
-            Box(Modifier) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .padding(DefaultDp)
+    ElevatedCard(
+        modifier
+            .onSizeChanged { cardContentHeight = it }
+            .clip(CardDefaults.shape)
+            .combinedClickable(
+                onLongClick = { onLongClick(student) },
+                onLongClickLabel = "Long Click to show the Options",
+                onClickLabel = null,
+                onClick = {}
+            ),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = DefaultDp)
+    ) {
+        Box {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(DefaultDp)
 
+            ) {
+                Box(
+                    Modifier.weight(1f),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Box(
-                        Modifier.weight(1f),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.temp_profile_pic),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .optionalSharedElement(StudentItemSharedContentKeys.Image)
-                                .padding(DefaultDp)
-                                .clip(RoundedCornerShape(ThreeQuarteredDoubleDefaultDp))
-                                .border(
-                                    0.5.dp,
-                                    color = Gray,
-                                    RoundedCornerShape(ThreeQuarteredDoubleDefaultDp)
+                    Image(
+                        painter = painterResource(R.drawable.temp_profile_pic),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .optionalSharedElement(StudentItemSharedContentKeys.Image)
+                            .padding(DefaultDp)
+                            .clip(RoundedCornerShape(ThreeQuarteredDoubleDefaultDp))
+                            .border(
+                                0.5.dp,
+                                color = Gray,
+                                RoundedCornerShape(ThreeQuarteredDoubleDefaultDp)
+                            )
+                    )
+                }
+                Spacer(Modifier.width(QuarterDefaultDp))
+                Column(
+                    Modifier.weight(1.5f),
+                    verticalArrangement = Arrangement.spacedBy(QuarterDefaultDp)
+                ) {
+                    Surface(Modifier.clip(RoundedCornerShape(HalfDefaultDp))) {
+                        Text(
+                            "ID: ${student.emiratesId}",
+                            Modifier
+                                .padding(
+                                    horizontal = DefaultDp
                                 )
+                                .optionalSharedElement(StudentItemSharedContentKeys.EmiratesId),
+                            color = MaterialTheme.colorScheme.secondary,
+                            fontSize = ThreeQuarteredDefaultSp,
                         )
                     }
-                    Spacer(Modifier.width(QuarterDefaultDp))
-                    Column(
-                        Modifier.weight(1.5f),
-                        verticalArrangement = Arrangement.spacedBy(QuarterDefaultDp)
+                    Text(
+                        student.name,
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontSize = DefaultSp,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.optionalSharedElement(
+                            StudentItemSharedContentKeys.Name
+                        )
+                    )
+                    Text(
+                        student.id.toString(),
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontSize = HalfDefaultSp,
+                        modifier = Modifier.optionalSharedElement(StudentItemSharedContentKeys.Id)
+                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .height(IntrinsicSize.Min)
+                            .optionalSharedElement(StudentItemSharedContentKeys.Status)
                     ) {
-                        Surface(Modifier.clip(RoundedCornerShape(HalfDefaultDp))) {
-                            Text(
-                                "ID: ${student.emiratesId}",
-                                Modifier
-                                    .padding(
-                                        horizontal = DefaultDp
-                                    )
-                                    .optionalSharedElement(StudentItemSharedContentKeys.EmiratesId),
-                                color = MaterialTheme.colorScheme.secondary,
-                                fontSize = ThreeQuarteredDefaultSp,
-                            )
-                        }
-                        Text(
-                            student.name,
-                            color = MaterialTheme.colorScheme.secondary,
-                            fontSize = DefaultSp,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.optionalSharedElement(
-                                StudentItemSharedContentKeys.Name
-                            )
-                        )
-                        Text(
-                            student.id.toString(),
-                            color = MaterialTheme.colorScheme.secondary,
-                            fontSize = HalfDefaultSp,
-                            modifier = Modifier.optionalSharedElement(StudentItemSharedContentKeys.Id)
-                        )
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
+                        Box(
+                            Modifier
                                 .height(IntrinsicSize.Min)
-                                .optionalSharedElement(StudentItemSharedContentKeys.Status)
-                        ) {
-                            Box(
-                                Modifier
-                                    .height(IntrinsicSize.Min)
-                                    .aspectRatio(1f)
-                                    .padding(QuarterDefaultDp)
-                                    .clip(CircleShape)
-                                    .background(MaterialTheme.colorScheme.error)
-                            )
-                            Text(
-                                stringResource(student.status.titleStringRes),
-                                fontSize = DefaultSp
-                            )
-                        }
+                                .aspectRatio(1f)
+                                .padding(QuarterDefaultDp)
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.error)
+                        )
+                        Text(
+                            stringResource(student.status.titleStringRes),
+                            fontSize = DefaultSp
+                        )
                     }
                 }
-                if (selected) {
-                    Column(
-                        Modifier
-                            .requiredSize(
-                                with(LocalDensity.current) {
-                                    cardContentHeight.width.toDp()
-                                },
-                                with(LocalDensity.current) {
-                                    cardContentHeight.height.toDp()
-                                }
-                            )
-                            .background(Gray.copy(0.5f))
-                            .clickable { onDeselected() },
-                        verticalArrangement = Arrangement.SpaceEvenly,
-                        horizontalAlignment = Alignment.CenterHorizontally
+            }
+            if (selected) {
+                Column(
+                    Modifier
+                        .requiredSize(
+                            with(LocalDensity.current) {
+                                cardContentHeight.width.toDp()
+                            },
+                            with(LocalDensity.current) {
+                                cardContentHeight.height.toDp()
+                            }
+                        )
+                        .background(Gray.copy(0.5f))
+                        .clickable { onDeselected() },
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if (isTestStarted) {
+                        Button(onClick = { onStartTestClick(student) }) {
+                            Text(stringResource(R.string.label_start_test).uppercase())
+                        }
+                    } else {
+                        Button(onClick = { onAttendOnBusClick(student) }) {
+                            Text(stringResource(R.string.label_attend_on_bus).uppercase())
+                        }
+                    }
+                    Button(
+                        onClick = { onAbsentClick(student) },
+                        colors = ButtonDefaults.buttonColors().copy(
+                            containerColor = MaterialTheme.colorScheme.errorContainer,
+                            contentColor = MaterialTheme.colorScheme.onErrorContainer
+                        )
                     ) {
-                        if (isTestStarted) {
-                            Button(onClick = { onStartTestClick(student) }) {
-                                Text(stringResource(R.string.label_start_test).uppercase())
-                            }
-                        } else {
-                            Button(onClick = { onAttendOnBusClick(student) }) {
-                                Text(stringResource(R.string.label_attend_on_bus).uppercase())
-                            }
-                        }
-                        Button(
-                            onClick = { onAbsentClick(student) },
-                            colors = ButtonDefaults.buttonColors().copy(
-                                containerColor = MaterialTheme.colorScheme.errorContainer,
-                                contentColor = MaterialTheme.colorScheme.onErrorContainer
-                            )
-                        ) {
-                            Text(stringResource(R.string.label_absent).uppercase())
-                        }
+                        Text(stringResource(R.string.label_absent).uppercase())
                     }
                 }
             }

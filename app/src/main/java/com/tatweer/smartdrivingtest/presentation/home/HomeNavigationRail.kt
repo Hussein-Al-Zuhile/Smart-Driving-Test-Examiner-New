@@ -6,6 +6,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -15,12 +16,16 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +36,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,13 +49,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.LifecycleStartEffect
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.eventFlow
 import com.tatweer.smartdrivingtest.R
 import com.tatweer.smartdrivingtest.presentation.base.PreviewTablet
 import com.tatweer.smartdrivingtest.presentation.theme.AppTheme
 import com.tatweer.smartdrivingtest.presentation.theme.DefaultDp
-import com.tatweer.smartdrivingtest.presentation.theme.DoubleDefaultDp
 import com.tatweer.smartdrivingtest.presentation.theme.HalfDefaultDp
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 
@@ -64,7 +76,7 @@ fun HomeNavigationRail(
         modifier = modifier
             .clip(CardDefaults.elevatedShape)
             .fillMaxHeight(),
-        color = MaterialTheme.colorScheme.surfaceContainer
+        color = MaterialTheme.colorScheme.surfaceContainerHighest
     ) {
 
         Column(
@@ -125,19 +137,6 @@ fun HomeNavigationRail(
     }
 }
 
-@PreviewTablet
-@Composable
-private fun HomeNavigationRailPreview() {
-    AppTheme {
-        var currentDestination by remember {
-            mutableStateOf<HomeNavigationDestinations>(HomeNavigationDestinations.DriveTest)
-        }
-        HomeNavigationRail(currentDestination, {
-            currentDestination = it
-        }, {}, isStudentTestStarted = false, Modifier.width(150.dp))
-    }
-}
-
 @Suppress("NO_REFLECTION_IN_CLASS_PATH")
 @Serializable
 sealed class HomeNavigationDestinations(
@@ -185,44 +184,53 @@ fun HomeNavigationItem(
 ) {
 
     val scaleAnimatableNotifier by remember { mutableStateOf(Animatable(1f)) }
+    var isDriveTestRunning by rememberSaveable { mutableStateOf(false) }
+
     LaunchedEffect(enabled) {
-        if (enabled) {
-            scaleAnimatableNotifier.animateTo(
-                1.25f,
-                animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy)
-            )
-            scaleAnimatableNotifier.animateTo(1f)
+        if (item == HomeNavigationDestinations.DriveTest) {
+            if (enabled) {
+                scaleAnimatableNotifier.animateTo(
+                    1.25f,
+                    animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy)
+                )
+                scaleAnimatableNotifier.animateTo(1f)
+                isDriveTestRunning = true
+            } else {
+                isDriveTestRunning = false
+            }
         }
     }
+    LaunchedEffect(selected) {
+        if (selected && item == HomeNavigationDestinations.DriveTest)
+            isDriveTestRunning = false
+    }
 
-    Card(
+    Surface(
         modifier.scale(scaleAnimatableNotifier.value),
-        colors = CardDefaults.cardColors(
-            containerColor = if (selected)
-                MaterialTheme.colorScheme.surfaceContainer
-            else
-                Color.Transparent
-        ),
+        color = when {
+            !enabled -> IconButtonDefaults.filledIconToggleButtonColors().disabledContainerColor
+            selected -> IconButtonDefaults.filledIconToggleButtonColors().checkedContainerColor
+            else -> Color.Transparent
+        },
+        contentColor = when {
+            !enabled -> IconButtonDefaults.filledIconToggleButtonColors().disabledContentColor
+            selected -> IconButtonDefaults.filledIconToggleButtonColors().checkedContentColor
+            else -> IconButtonDefaults.filledIconToggleButtonColors().contentColor
+        },
         shape = RectangleShape,
     ) {
-        Surface(
-            color = when {
-                !enabled -> IconButtonDefaults.filledIconToggleButtonColors().disabledContainerColor
-                selected -> IconButtonDefaults.filledIconToggleButtonColors().checkedContainerColor
-                else -> IconButtonDefaults.filledIconToggleButtonColors().containerColor
-            },
-            contentColor = when {
-                !enabled -> IconButtonDefaults.filledIconToggleButtonColors().disabledContentColor
-                selected -> IconButtonDefaults.filledIconToggleButtonColors().checkedContentColor
-                else -> IconButtonDefaults.filledIconToggleButtonColors().contentColor
-            },
+        Column(
+            modifier = Modifier
+                .clickable(enabled) { onDestinationSelected(item) }
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier
-                    .clickable(enabled) { onDestinationSelected(item) }
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+
+            BadgedBox(badge = {
+                if (isDriveTestRunning) {
+                    Badge(Modifier.padding(top = HalfDefaultDp))
+                }
+            }) {
                 Icon(
                     painter = painterResource(item.icon),
                     contentDescription = null,
@@ -230,24 +238,26 @@ fun HomeNavigationItem(
                         .fillMaxWidth(0.5f)
                         .padding(vertical = HalfDefaultDp)
                 )
-                Text(
-                    stringResource(item.title),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.labelSmall,
-                )
-                Spacer(Modifier.height(HalfDefaultDp))
             }
+            Text(
+                stringResource(item.title),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.labelSmall,
+            )
+            Spacer(Modifier.height(HalfDefaultDp))
         }
     }
 }
 
+@PreviewTablet
 @Composable
-private fun HomeNavigationItemPreview() {
+private fun HomeNavigationRailPreview() {
     AppTheme {
-        HomeNavigationItem(
-            item = HomeNavigationDestinations.DriveTest,
-            selected = true,
-            onDestinationSelected = {}
-        )
+        var currentDestination by remember {
+            mutableStateOf<HomeNavigationDestinations>(HomeNavigationDestinations.DriveTest)
+        }
+        HomeNavigationRail(currentDestination, {
+            currentDestination = it
+        }, {}, isStudentTestStarted = false, Modifier.width(150.dp))
     }
 }
