@@ -13,3 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+/tempKeystoreProperties.properties
+/TempKeystore.jks
+/Smart Driving Test Examiner New.zip
+/app/debug/app-debug.apk
+/app/debug/output-metadata.json
+/.idea/runConfigurations.xml
